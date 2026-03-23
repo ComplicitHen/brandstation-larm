@@ -24,8 +24,18 @@
             android:gravity="center"
             android:textSize="17sp"
             android:textStyle="bold"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="4dp"
             android:text="Laddar…" />
+
+        <TextView
+            android:id="@+id/tvNextDuty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="13sp"
+            android:textColor="?android:textColorSecondary"
+            android:layout_marginBottom="20dp"
+            android:text="" />
 
         <!-- På/Av-toggle -->
         <com.google.android.material.switchmaterial.SwitchMaterial

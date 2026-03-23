@@ -29,6 +29,54 @@ class ScheduleManager(context: Context) {
     }
 
     /**
+     * Returnerar nästa passstart som "Måndag 07:00", eller null om varje dag är pass.
+     * Feature 4: visas i MainActivity under statusraden.
+     */
+    fun nextDutyStart(): String? {
+        val mask = prefs.dutyDaysMask
+        // Om alla dagar är pass — ingen "nästa" att visa
+        if (mask and 0b1111111 == 0b1111111) return null
+
+        val startMinutes = prefs.dutyStartMinutes
+        val cal = Calendar.getInstance()
+        val nowDayBit = when (cal.get(Calendar.DAY_OF_WEEK)) {
+            Calendar.MONDAY    -> 0
+            Calendar.TUESDAY   -> 1
+            Calendar.WEDNESDAY -> 2
+            Calendar.THURSDAY  -> 3
+            Calendar.FRIDAY    -> 4
+            Calendar.SATURDAY  -> 5
+            Calendar.SUNDAY    -> 6
+            else               -> 0
+        }
+        val nowMinutes = cal.get(Calendar.HOUR_OF_DAY) * 60 + cal.get(Calendar.MINUTE)
+
+        // Sök nästa passdag inom 7 dagar framåt
+        for (offset in 0..6) {
+            val dayBit = (nowDayBit + offset) % 7
+            val isDutyDay = (mask shr dayBit) and 1 == 1
+            if (!isDutyDay) continue
+            // Samma dag: passet måste börja i framtiden
+            if (offset == 0 && nowMinutes >= startMinutes) continue
+
+            val dayName = when (dayBit) {
+                0 -> "Måndag"
+                1 -> "Tisdag"
+                2 -> "Onsdag"
+                3 -> "Torsdag"
+                4 -> "Fredag"
+                5 -> "Lördag"
+                6 -> "Söndag"
+                else -> "?"
+            }
+            val hh = startMinutes / 60
+            val mm = startMinutes % 60
+            return "$dayName %02d:%02d".format(hh, mm)
+        }
+        return null
+    }
+
+    /**
      * Avgör om ett inkommande SMS ska utlösa larm.
      *
      * Riktiga SMS från VRR Ledningscentral ser ut så här:

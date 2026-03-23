@@ -3,6 +3,8 @@ package com.brandstation.larm
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
@@ -22,10 +24,22 @@ class AlarmService : Service() {
     private var wakeLock: PowerManager.WakeLock? = null
     private var isAlarmActive = false
 
+    // Feature 3: Watchdog — dynamisk registrering av TIME_TICK
+    private val watchdogReceiver = WatchdogReceiver()
+    private var watchdogRegistered = false
+
+    // Feature 6: Repeat-larm om ej kvitterat
+    private var repeatAlarmType: AlarmType = AlarmType.REGULAR
+    private var repeatMessage: String = ""
+
     override fun onCreate() {
         super.onCreate()
         alarmPlayer = AlarmPlayer(this)
         createNotificationChannels()
+
+        // Feature 3: Registrera watchdog dynamiskt (ACTION_TIME_TICK kräver dynamisk registrering)
+        registerReceiver(watchdogReceiver, IntentFilter(Intent.ACTION_TIME_TICK))
+        watchdogRegistered = true
         Log.i(TAG, "Tjänsten skapad")
     }
 
@@ -47,6 +61,14 @@ class AlarmService : Service() {
                 val nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
                 nm.notify(NOTIF_MONITOR, buildMonitorNotification())
             }
+            // Feature 6: Upprepa larm om ej kvitterat
+            ACTION_REPEAT -> {
+                if (isAlarmActive) {
+                    Log.i(TAG, "Upprepar larm (ej kvitterat)")
+                    alarmPlayer.play(repeatAlarmType)
+                    scheduleRepeat(repeatAlarmType, repeatMessage)
+                }
+            }
         }
 
         return START_STICKY   // Systemet startar om tjänsten om den dödas
@@ -58,6 +80,8 @@ class AlarmService : Service() {
             return
         }
         isAlarmActive = true
+        repeatAlarmType = alarmType
+        repeatMessage = message
         Log.i(TAG, "LARM UTLÖST: $alarmType — $message")
 
         // Spara i larmloggen
@@ -80,6 +104,9 @@ class AlarmService : Service() {
         alarmPlayer.play(alarmType)
         showAlarmNotification(alarmType, message)
 
+        // Feature 6: Schemalägg upprepning om 3 minuter
+        scheduleRepeat(alarmType, message)
+
         // Starta AlarmActivity som visas ovanpå låsskärmen
         val alarmIntent = Intent(this, AlarmActivity::class.java).apply {
             putExtra(EXTRA_ALARM_TYPE, alarmType.name)
@@ -89,12 +116,48 @@ class AlarmService : Service() {
         startActivity(alarmIntent)
     }
 
+    // Feature 6: Schemalägg upprepning av larm om 3 minuter
+    private fun scheduleRepeat(alarmType: AlarmType, message: String) {
+        val repeatIntent = Intent(this, AlarmService::class.java).apply {
+            action = ACTION_REPEAT
+            putExtra(EXTRA_ALARM_TYPE, alarmType.name)
+            putExtra(EXTRA_MESSAGE, message)
+        }
+        val pi = PendingIntent.getService(
+            this, REQ_REPEAT, repeatIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val triggerAt = System.currentTimeMillis() + 3 * 60 * 1000L
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pi)
+        } else {
+            am.setExact(AlarmManager.RTC_WAKEUP, triggerAt, pi)
+        }
+    }
+
+    // Feature 6: Avbryt schemalagd upprepning
+    private fun cancelRepeat() {
+        val repeatIntent = Intent(this, AlarmService::class.java).apply {
+            action = ACTION_REPEAT
+        }
+        val pi = PendingIntent.getService(
+            this, REQ_REPEAT, repeatIntent,
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+        )
+        pi?.let {
+            val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            am.cancel(it)
+        }
+    }
+
     fun dismissAlarm() {
         if (!isAlarmActive) return
         isAlarmActive = false
         alarmPlayer.stop()
         wakeLock?.release()
         wakeLock = null
+        cancelRepeat()
         val nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         nm.cancel(NOTIF_ALARM)
         // Uppdatera statusnotisen
@@ -175,14 +238,19 @@ class AlarmService : Service() {
             }
         )
 
+        // Feature 5: LED-blinkning på larmkanalen
         nm.createNotificationChannel(
             NotificationChannel(CHANNEL_ALARM, "Larm",
                 NotificationManager.IMPORTANCE_HIGH).apply {
                 description = "Larmnotifikation från SOS/brandstation"
                 enableVibration(true)
+                enableLights(true)
+                lightColor = Color.RED
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             }
         )
+
+        // Watchdog-kanal skapas i WatchdogReceiver vid behov
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -191,6 +259,10 @@ class AlarmService : Service() {
         super.onDestroy()
         alarmPlayer.stop()
         wakeLock?.release()
+        if (watchdogRegistered) {
+            unregisterReceiver(watchdogReceiver)
+            watchdogRegistered = false
+        }
         Log.w(TAG, "AlarmService förstörd — systemet borde starta om den")
     }
 
@@ -200,6 +272,8 @@ class AlarmService : Service() {
         const val ACTION_TRIGGER = "com.brandstation.larm.TRIGGER"
         const val ACTION_DISMISS = "com.brandstation.larm.DISMISS"
         const val ACTION_START_MONITOR = "com.brandstation.larm.START_MONITOR"
+        // Feature 6
+        const val ACTION_REPEAT = "com.brandstation.larm.REPEAT"
 
         const val EXTRA_ALARM_TYPE = "alarm_type"
         const val EXTRA_MESSAGE = "message"
@@ -210,5 +284,7 @@ class AlarmService : Service() {
 
         const val NOTIF_MONITOR = 1
         const val NOTIF_ALARM = 2
+
+        private const val REQ_REPEAT = 300
     }
 }

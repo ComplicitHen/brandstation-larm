@@ -155,6 +155,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.tvStatus.text = statusText
         binding.statusIndicator.setBackgroundColor(color)
+
+        // Feature 4: Nästa passvisning
+        val nextDuty = scheduleManager.nextDutyStart()
+        binding.tvNextDuty.text = if (nextDuty != null) "Nästa pass: $nextDuty" else ""
     }
 
     private fun updatePermissionBadge() {
