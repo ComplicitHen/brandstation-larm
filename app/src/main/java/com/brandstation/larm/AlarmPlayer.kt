@@ -19,7 +19,6 @@ class AlarmPlayer(private val context: Context) {
     fun play(alarmType: AlarmType) {
         stop()
 
-        // Sätt alarmvolymen till max
         val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         savedVolume = am.getStreamVolume(AudioManager.STREAM_ALARM)
         am.setStreamVolume(
@@ -28,8 +27,8 @@ class AlarmPlayer(private val context: Context) {
             0
         )
 
-        val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-            ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+        val prefs = Prefs(context)
+        val customUri = prefs.customSoundUri
 
         try {
             mediaPlayer = MediaPlayer().apply {
@@ -39,16 +38,48 @@ class AlarmPlayer(private val context: Context) {
                         .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                         .build()
                 )
-                setDataSource(context, uri)
+
+                // Prioritet: eget ljud → inbyggd larmsignal → systemlarm
+                val rawRes = if (alarmType == AlarmType.TOTAL) R.raw.alarm_total else R.raw.alarm_regular
+                when {
+                    customUri != null -> {
+                        setDataSource(context, android.net.Uri.parse(customUri))
+                        Log.d("AlarmPlayer", "Spelar eget ljud: $customUri")
+                    }
+                    else -> {
+                        val fd = context.resources.openRawResourceFd(rawRes)
+                        setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
+                        fd.close()
+                        Log.d("AlarmPlayer", "Spelar inbyggd larmsignal ($alarmType)")
+                    }
+                }
                 isLooping = true
                 prepare()
                 start()
             }
         } catch (e: Exception) {
-            Log.e("AlarmPlayer", "Kunde inte spela larmsignal", e)
+            Log.e("AlarmPlayer", "Kunde inte spela bundlad signal, fallback till systemlarm", e)
+            // Fallback: systemets larmsignal
+            runCatching {
+                mediaPlayer?.release()
+                val fallbackUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+                    ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+                mediaPlayer = MediaPlayer().apply {
+                    setAudioAttributes(
+                        AudioAttributes.Builder()
+                            .setUsage(AudioAttributes.USAGE_ALARM)
+                            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                            .build()
+                    )
+                    setDataSource(context, fallbackUri)
+                    isLooping = true
+                    prepare()
+                    start()
+                }
+            }
         }
 
-        vibrate()
+        vibrate(alarmType)
     }
 
     fun stop() {
@@ -67,9 +98,13 @@ class AlarmPlayer(private val context: Context) {
         stopVibration()
     }
 
-    private fun vibrate() {
-        // Vibrationsmönster: 0ms paus, 600ms vibration, 300ms paus — upprepa
-        val pattern = longArrayOf(0, 600, 300, 600, 300, 1000, 300)
+    private fun vibrate(alarmType: AlarmType) {
+        // Totallarm: intensivare vibrationsmönster
+        val pattern = if (alarmType == AlarmType.TOTAL) {
+            longArrayOf(0, 800, 200, 800, 200, 800, 500)
+        } else {
+            longArrayOf(0, 600, 300, 600, 300, 1000, 300)
+        }
 
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -80,6 +115,7 @@ class AlarmPlayer(private val context: Context) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 v.vibrate(VibrationEffect.createWaveform(pattern, 0))
             } else {
+                @Suppress("DEPRECATION")
                 v.vibrate(pattern, 0)
             }
         }

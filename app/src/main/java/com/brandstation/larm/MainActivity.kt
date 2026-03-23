@@ -1,12 +1,13 @@
 package com.brandstation.larm
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
-import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -18,6 +19,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var prefs: Prefs
     private lateinit var scheduleManager: ScheduleManager
+
+    companion object {
+        private const val REQ_PICK_SOUND = 42
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         updateStatusDisplay()
         binding.enableSwitch.isChecked = prefs.isEnabled
         updatePermissionBadge()
+        updateSoundButtonLabel()
     }
 
     private fun setupUI() {
@@ -61,7 +67,13 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, PermissionsActivity::class.java))
         }
 
-        // Testknapp: Totallarm — triggar direkt, testar larm + vibration
+        binding.btnLog.setOnClickListener {
+            startActivity(Intent(this, LogActivity::class.java))
+        }
+
+        binding.btnPickSound.setOnClickListener { pickSoundFile() }
+
+        // Testknapp: Totallarm
         binding.btnTestTotal.setOnClickListener {
             triggerTestAlarm(AlarmType.TOTAL,
                 "Larminformation från VRR Ledningscentral\nTOTALLARM - Fri inryckning\nTID : TESTLARM")
@@ -75,20 +87,49 @@ class MainActivity : AppCompatActivity() {
 
         // Stäng av pågående larm
         binding.btnStopAlarm.setOnClickListener {
-            val intent = Intent(this, AlarmService::class.java).apply {
-                action = AlarmService.ACTION_DISMISS
-            }
+            val intent = Intent(this, AlarmService::class.java)
+            intent.setAction(AlarmService.ACTION_DISMISS)
             startService(intent)
             Toast.makeText(this, "Larm stängt av", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun triggerTestAlarm(alarmType: AlarmType, message: String) {
-        val intent = Intent(this, AlarmService::class.java).apply {
-            action = AlarmService.ACTION_TRIGGER
-            putExtra(AlarmService.EXTRA_ALARM_TYPE, alarmType.name)
-            putExtra(AlarmService.EXTRA_MESSAGE, message)
+    private fun pickSoundFile() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "audio/*"
         }
+        startActivityForResult(intent, REQ_PICK_SOUND)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQ_PICK_SOUND && resultCode == Activity.RESULT_OK) {
+            val uri: Uri = data?.data ?: return
+            // Begär persistent läsrättighet så appen kommer åt filen även efter omstart
+            contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            prefs.customSoundUri = uri.toString()
+            updateSoundButtonLabel()
+            Toast.makeText(this, "Larmsignal sparad", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateSoundButtonLabel() {
+        val custom = prefs.customSoundUri
+        binding.btnPickSound.text = if (custom != null) {
+            val name = Uri.parse(custom).lastPathSegment ?: "eget ljud"
+            "Larmsignal: $name"
+        } else {
+            "Välj larmsignal  (standard: inbyggd)"
+        }
+    }
+
+    private fun triggerTestAlarm(alarmType: AlarmType, message: String) {
+        val intent = Intent(this, AlarmService::class.java)
+        intent.setAction(AlarmService.ACTION_TRIGGER)
+        intent.putExtra(AlarmService.EXTRA_ALARM_TYPE, alarmType.name)
+        intent.putExtra(AlarmService.EXTRA_MESSAGE, message)
         startForegroundService(intent)
     }
 
@@ -136,9 +177,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun ensureServiceRunning() {
-        val intent = Intent(this, AlarmService::class.java).apply {
-            action = AlarmService.ACTION_START_MONITOR
-        }
+        val intent = Intent(this, AlarmService::class.java)
+        intent.setAction(AlarmService.ACTION_START_MONITOR)
         startForegroundService(intent)
     }
 

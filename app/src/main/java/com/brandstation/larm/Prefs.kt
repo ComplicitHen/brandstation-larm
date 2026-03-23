@@ -55,4 +55,15 @@ class Prefs(context: Context) {
     var smsTestMode: Boolean
         get() = p.getBoolean("sms_test_mode", false)
         set(v) = p.edit().putBoolean("sms_test_mode", v).apply()
+
+    /** URI till eget valt ljud, null = använd inbyggd signal */
+    var customSoundUri: String?
+        get() = p.getString("custom_sound_uri", null)
+        set(v) = if (v == null) p.edit().remove("custom_sound_uri").apply()
+                 else p.edit().putString("custom_sound_uri", v).apply()
+
+    /** Larmlogg: JSON-lista med de senaste larmen (max 50 poster) */
+    var alarmLogJson: String
+        get() = p.getString("alarm_log", "[]") ?: "[]"
+        set(v) = p.edit().putString("alarm_log", v).apply()
 }

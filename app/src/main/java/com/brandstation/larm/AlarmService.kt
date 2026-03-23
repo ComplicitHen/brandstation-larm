@@ -37,8 +37,9 @@ class AlarmService : Service() {
             ACTION_TRIGGER -> {
                 val typeName = intent.getStringExtra(EXTRA_ALARM_TYPE) ?: return START_STICKY
                 val message = intent.getStringExtra(EXTRA_MESSAGE) ?: ""
+                val sender = intent.getStringExtra(EXTRA_SENDER) ?: ""
                 val alarmType = AlarmType.valueOf(typeName)
-                triggerAlarm(alarmType, message)
+                triggerAlarm(alarmType, message, sender)
             }
             ACTION_DISMISS -> dismissAlarm()
             ACTION_START_MONITOR -> {
@@ -51,13 +52,23 @@ class AlarmService : Service() {
         return START_STICKY   // Systemet startar om tjänsten om den dödas
     }
 
-    private fun triggerAlarm(alarmType: AlarmType, message: String) {
+    private fun triggerAlarm(alarmType: AlarmType, message: String, sender: String = "") {
         if (isAlarmActive) {
             Log.w(TAG, "Larm redan aktivt, ignorerar nytt larm")
             return
         }
         isAlarmActive = true
         Log.i(TAG, "LARM UTLÖST: $alarmType — $message")
+
+        // Spara i larmloggen
+        val testMode = Prefs(this).smsTestMode
+        AlarmLog.add(this, AlarmEntry(
+            timestamp = System.currentTimeMillis(),
+            alarmType = alarmType,
+            sender = sender,
+            message = message,
+            wasTestMode = testMode,
+        ))
 
         // Håll skärmen tänd under larmet (max 10 minuter)
         val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
@@ -94,9 +105,8 @@ class AlarmService : Service() {
     private fun showAlarmNotification(alarmType: AlarmType, message: String) {
         val title = if (alarmType == AlarmType.TOTAL) "⚠ TOTALLARM" else "🚒 LARM"
 
-        val dismissIntent = Intent(this, AlarmService::class.java).apply {
-            action = ACTION_DISMISS
-        }
+        val dismissIntent = Intent(this, AlarmService::class.java)
+        dismissIntent.setAction(ACTION_DISMISS)
         val dismissPi = PendingIntent.getService(
             this, 10, dismissIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
@@ -193,6 +203,7 @@ class AlarmService : Service() {
 
         const val EXTRA_ALARM_TYPE = "alarm_type"
         const val EXTRA_MESSAGE = "message"
+        const val EXTRA_SENDER = "sender"
 
         const val CHANNEL_MONITOR = "ch_monitor"
         const val CHANNEL_ALARM = "ch_alarm"

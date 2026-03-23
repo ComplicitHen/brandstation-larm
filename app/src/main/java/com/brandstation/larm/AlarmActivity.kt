@@ -51,9 +51,8 @@ class AlarmActivity : AppCompatActivity() {
         binding.alarmMessage.text = message
 
         binding.dismissButton.setOnClickListener {
-            val intent = Intent(this, AlarmService::class.java).apply {
-                action = AlarmService.ACTION_DISMISS
-            }
+            val intent = Intent(this, AlarmService::class.java)
+            intent.setAction(AlarmService.ACTION_DISMISS)
             startService(intent)
             finish()
         }

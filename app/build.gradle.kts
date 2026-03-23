@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.brandstation.larm"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.brandstation.larm"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
     }
@@ -40,4 +40,5 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
 }

@@ -13,9 +13,8 @@ class BootReceiver : BroadcastReceiver() {
 
         Log.i("BootReceiver", "Startar övervakingstjänsten efter: $action")
 
-        val serviceIntent = Intent(context, AlarmService::class.java).apply {
-            action = AlarmService.ACTION_START_MONITOR
-        }
+        val serviceIntent = Intent(context, AlarmService::class.java)
+        serviceIntent.action = AlarmService.ACTION_START_MONITOR
         context.startForegroundService(serviceIntent)
     }
 }

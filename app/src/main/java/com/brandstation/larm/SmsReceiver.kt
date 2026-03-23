@@ -30,11 +30,11 @@ class SmsReceiver : BroadcastReceiver() {
 
         // Skicka till AlarmService — om tjänsten redan kör som foreground
         // räcker startService(), annars startForegroundService()
-        val serviceIntent = Intent(context, AlarmService::class.java).apply {
-            action = AlarmService.ACTION_TRIGGER
-            putExtra(AlarmService.EXTRA_ALARM_TYPE, alarmType.name)
-            putExtra(AlarmService.EXTRA_MESSAGE, body)
-        }
+        val serviceIntent = Intent(context, AlarmService::class.java)
+        serviceIntent.setAction(AlarmService.ACTION_TRIGGER)
+        serviceIntent.putExtra(AlarmService.EXTRA_ALARM_TYPE, alarmType.name)
+        serviceIntent.putExtra(AlarmService.EXTRA_MESSAGE, body)
+        serviceIntent.putExtra(AlarmService.EXTRA_SENDER, sender)
         context.startForegroundService(serviceIntent)
     }
 

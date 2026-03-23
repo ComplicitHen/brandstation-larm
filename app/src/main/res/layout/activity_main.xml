@@ -60,6 +60,22 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:text="Behörigheter"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:id="@+id/btnLog"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Larmlogg"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:id="@+id/btnPickSound"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Välj larmsignal"
             android:layout_marginBottom="24dp" />
 
         <!-- Avdelare -->
