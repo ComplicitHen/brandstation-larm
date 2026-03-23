@@ -23,6 +23,7 @@ class SettingsActivity : AppCompatActivity() {
         binding.etSenderNumber.setText(prefs.senderNumber)
         binding.etTotalAlarmKeyword.setText(prefs.totalAlarmKeyword)
         binding.etAlarmKeyword.setText(prefs.alarmKeyword)
+        binding.switchTotalAlarm.isChecked = prefs.totalAlarmEnabled
         binding.switchSmsTestMode.isChecked = prefs.smsTestMode
 
         binding.switchSmsTestMode.setOnCheckedChangeListener { _, checked ->
@@ -48,6 +49,7 @@ class SettingsActivity : AppCompatActivity() {
             prefs.senderNumber = sender
             prefs.totalAlarmKeyword = totalKw
             prefs.alarmKeyword = alarmKw
+            prefs.totalAlarmEnabled = binding.switchTotalAlarm.isChecked
             Toast.makeText(this, "Inställningar sparade", Toast.LENGTH_SHORT).show()
             finish()
         }

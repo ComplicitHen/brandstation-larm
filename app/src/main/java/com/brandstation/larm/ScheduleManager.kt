@@ -50,9 +50,9 @@ class ScheduleManager(context: Context) {
         val isAnyAlarm = message.contains(prefs.alarmKeyword, ignoreCase = true)
 
         return when {
-            isTotalAlarm           -> AlarmType.TOTAL
-            isAnyAlarm && isOnDuty() -> AlarmType.REGULAR
-            else                   -> null
+            isTotalAlarm && prefs.totalAlarmEnabled -> AlarmType.TOTAL
+            isAnyAlarm && isOnDuty()                -> AlarmType.REGULAR
+            else                                    -> null
         }
     }
 }

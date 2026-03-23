@@ -43,6 +43,11 @@ class Prefs(context: Context) {
         get() = p.getInt("duty_end", 22 * 60)
         set(v) = p.edit().putInt("duty_end", v).apply()
 
+    /** Om totallarm ska trigga larm. Standard = true. */
+    var totalAlarmEnabled: Boolean
+        get() = p.getBoolean("totallarm_enabled", true)
+        set(v) = p.edit().putBoolean("totallarm_enabled", v).apply()
+
     /**
      * SMS-testläge: när PÅ accepteras SMS från ALLA avsändare (inte bara senderNumber).
      * Används för att testa hela SMS-kedjan genom att smsa till sig själv.
