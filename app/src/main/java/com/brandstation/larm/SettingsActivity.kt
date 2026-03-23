@@ -33,6 +33,8 @@ class SettingsActivity : AppCompatActivity() {
         binding.etAlarmKeyword.setText(prefs.alarmKeyword)
         binding.switchTotalAlarm.isChecked = prefs.totalAlarmEnabled
         binding.switchSmsTestMode.isChecked = prefs.smsTestMode
+        binding.switchVibrationOnly.isChecked = prefs.vibrationOnly
+        binding.switchUseTts.isChecked = prefs.useTts
 
         binding.switchSmsTestMode.setOnCheckedChangeListener { _, checked ->
             prefs.smsTestMode = checked
@@ -42,6 +44,24 @@ class SettingsActivity : AppCompatActivity() {
                     "SMS-testläge PÅ — appen triggar nu på SMS från alla avsändare!",
                     Toast.LENGTH_LONG
                 ).show()
+            }
+        }
+
+        binding.switchVibrationOnly.setOnCheckedChangeListener { _, checked ->
+            prefs.vibrationOnly = checked
+            if (checked && prefs.useTts) {
+                prefs.useTts = false
+                binding.switchUseTts.isChecked = false
+                Toast.makeText(this, "Vibration-only aktiverat, TTS inaktiverat", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        binding.switchUseTts.setOnCheckedChangeListener { _, checked ->
+            prefs.useTts = checked
+            if (checked && prefs.vibrationOnly) {
+                prefs.vibrationOnly = false
+                binding.switchVibrationOnly.isChecked = false
+                Toast.makeText(this, "TTS aktiverat, vibration-only inaktiverat", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -104,6 +124,8 @@ class SettingsActivity : AppCompatActivity() {
                     binding.etAlarmKeyword.setText(prefs.alarmKeyword)
                     binding.switchTotalAlarm.isChecked = prefs.totalAlarmEnabled
                     binding.switchSmsTestMode.isChecked = prefs.smsTestMode
+                    binding.switchVibrationOnly.isChecked = prefs.vibrationOnly
+                    binding.switchUseTts.isChecked = prefs.useTts
                     Toast.makeText(this, "Inställningar importerade", Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
                     Toast.makeText(this, "Ogiltig JSON: ${e.message}", Toast.LENGTH_LONG).show()

@@ -4,11 +4,13 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -22,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val REQ_PICK_SOUND = 42
+        private const val REQ_PICK_RINGTONE = 43
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,23 +98,61 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun pickSoundFile() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "audio/*"
-        }
-        startActivityForResult(intent, REQ_PICK_SOUND)
+        val items = arrayOf(
+            "Systemlarm/ringtone",
+            "Välj ljudfil",
+            "Återställ standard (inbyggd signal)"
+        )
+        AlertDialog.Builder(this)
+            .setTitle("Välj larmsignal")
+            .setItems(items) { _, which ->
+                when (which) {
+                    0 -> {
+                        val existingUri = prefs.customSoundUri?.let { Uri.parse(it) }
+                        val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
+                            putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
+                            putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+                            if (existingUri != null) {
+                                putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, existingUri)
+                            }
+                        }
+                        startActivityForResult(intent, REQ_PICK_RINGTONE)
+                    }
+                    1 -> {
+                        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                            addCategory(Intent.CATEGORY_OPENABLE)
+                            type = "audio/*"
+                        }
+                        startActivityForResult(intent, REQ_PICK_SOUND)
+                    }
+                    2 -> {
+                        prefs.customSoundUri = null
+                        updateSoundButtonLabel()
+                        Toast.makeText(this, "Återställd till inbyggd signal", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            .show()
     }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQ_PICK_SOUND && resultCode == Activity.RESULT_OK) {
-            val uri: Uri = data?.data ?: return
-            // Begär persistent läsrättighet så appen kommer åt filen även efter omstart
-            contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            prefs.customSoundUri = uri.toString()
-            updateSoundButtonLabel()
-            Toast.makeText(this, "Larmsignal sparad", Toast.LENGTH_SHORT).show()
+        when {
+            requestCode == REQ_PICK_SOUND && resultCode == Activity.RESULT_OK -> {
+                val uri: Uri = data?.data ?: return
+                // Begär persistent läsrättighet så appen kommer åt filen även efter omstart
+                contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                prefs.customSoundUri = uri.toString()
+                updateSoundButtonLabel()
+                Toast.makeText(this, "Larmsignal sparad", Toast.LENGTH_SHORT).show()
+            }
+            requestCode == REQ_PICK_RINGTONE && resultCode == Activity.RESULT_OK -> {
+                val uri: Uri? = data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+                prefs.customSoundUri = uri?.toString()
+                updateSoundButtonLabel()
+                Toast.makeText(this, "Larmsignal sparad", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

@@ -6,64 +6,64 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.speech.tts.TextToSpeech
 import android.util.Log
+import java.util.Locale
 
 class AlarmPlayer(private val context: Context) {
 
     private var mediaPlayer: MediaPlayer? = null
     private var savedVolume = -1
+    private var tts: TextToSpeech? = null
+    private var ttsActive = false
 
     fun play(alarmType: AlarmType) {
         stop()
 
-        val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        savedVolume = am.getStreamVolume(AudioManager.STREAM_ALARM)
-        am.setStreamVolume(
-            AudioManager.STREAM_ALARM,
-            am.getStreamMaxVolume(AudioManager.STREAM_ALARM),
-            0
-        )
-
         val prefs = Prefs(context)
-        val customUri = prefs.customSoundUri
+        val vibrationOnly = prefs.vibrationOnly
+        val useTts = prefs.useTts
 
-        try {
-            mediaPlayer = MediaPlayer().apply {
-                setAudioAttributes(
-                    AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_ALARM)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                        .build()
-                )
+        if (!vibrationOnly) {
+            val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            savedVolume = am.getStreamVolume(AudioManager.STREAM_ALARM)
+            am.setStreamVolume(
+                AudioManager.STREAM_ALARM,
+                am.getStreamMaxVolume(AudioManager.STREAM_ALARM),
+                0
+            )
+        }
 
-                // Prioritet: eget ljud → inbyggd larmsignal → systemlarm
-                val rawRes = if (alarmType == AlarmType.TOTAL) R.raw.alarm_total else R.raw.alarm_regular
-                when {
-                    customUri != null -> {
-                        setDataSource(context, android.net.Uri.parse(customUri))
-                        Log.d("AlarmPlayer", "Spelar eget ljud: $customUri")
-                    }
-                    else -> {
-                        val fd = context.resources.openRawResourceFd(rawRes)
-                        setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
-                        fd.close()
-                        Log.d("AlarmPlayer", "Spelar inbyggd larmsignal ($alarmType)")
-                    }
-                }
-                isLooping = true
-                prepare()
-                start()
+        if (!vibrationOnly && useTts) {
+            // TTS-läge: spela larmet med röst
+            val ttsText = if (alarmType == AlarmType.TOTAL) {
+                "Totallarm! Totallarm! Fri inryckning!"
+            } else {
+                "Larm! Larm! Brandkåren kallas ut!"
             }
-        } catch (e: Exception) {
-            Log.e("AlarmPlayer", "Kunde inte spela bundlad signal, fallback till systemlarm", e)
-            // Fallback: systemets larmsignal
-            runCatching {
-                mediaPlayer?.release()
-                val fallbackUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-                    ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+            ttsActive = true
+            tts = TextToSpeech(context) { status ->
+                if (status == TextToSpeech.SUCCESS) {
+                    val result = tts?.setLanguage(Locale("sv", "SE"))
+                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        tts?.language = Locale.getDefault()
+                    }
+                    val params = android.os.Bundle().apply {
+                        putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, AudioManager.STREAM_ALARM)
+                    }
+                    tts?.speak(ttsText, TextToSpeech.QUEUE_FLUSH, params, "alarm_tts")
+                    scheduleTtsRepeat(ttsText, params)
+                }
+            }
+        } else if (!vibrationOnly) {
+            val customUri = prefs.customSoundUri
+
+            try {
                 mediaPlayer = MediaPlayer().apply {
                     setAudioAttributes(
                         AudioAttributes.Builder()
@@ -71,15 +71,58 @@ class AlarmPlayer(private val context: Context) {
                             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                             .build()
                     )
-                    setDataSource(context, fallbackUri)
+
+                    // Prioritet: eget ljud → inbyggd larmsignal → systemlarm
+                    val rawRes = if (alarmType == AlarmType.TOTAL) R.raw.alarm_total else R.raw.alarm_regular
+                    when {
+                        customUri != null -> {
+                            setDataSource(context, android.net.Uri.parse(customUri))
+                            Log.d("AlarmPlayer", "Spelar eget ljud: $customUri")
+                        }
+                        else -> {
+                            val fd = context.resources.openRawResourceFd(rawRes)
+                            setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
+                            fd.close()
+                            Log.d("AlarmPlayer", "Spelar inbyggd larmsignal ($alarmType)")
+                        }
+                    }
                     isLooping = true
                     prepare()
                     start()
+                }
+            } catch (e: Exception) {
+                Log.e("AlarmPlayer", "Kunde inte spela bundlad signal, fallback till systemlarm", e)
+                // Fallback: systemets larmsignal
+                runCatching {
+                    mediaPlayer?.release()
+                    val fallbackUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+                        ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+                    mediaPlayer = MediaPlayer().apply {
+                        setAudioAttributes(
+                            AudioAttributes.Builder()
+                                .setUsage(AudioAttributes.USAGE_ALARM)
+                                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                                .build()
+                        )
+                        setDataSource(context, fallbackUri)
+                        isLooping = true
+                        prepare()
+                        start()
+                    }
                 }
             }
         }
 
         vibrate(alarmType)
+    }
+
+    private fun scheduleTtsRepeat(ttsText: String, params: android.os.Bundle) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (ttsActive) {
+                tts?.speak(ttsText, TextToSpeech.QUEUE_FLUSH, params, "alarm_tts")
+                scheduleTtsRepeat(ttsText, params)
+            }
+        }, 8000L)
     }
 
     fun stop() {
@@ -88,6 +131,11 @@ class AlarmPlayer(private val context: Context) {
             release()
         }
         mediaPlayer = null
+
+        ttsActive = false
+        tts?.stop()
+        tts?.shutdown()
+        tts = null
 
         if (savedVolume >= 0) {
             val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager

@@ -66,4 +66,14 @@ class Prefs(context: Context) {
     var alarmLogJson: String
         get() = p.getString("alarm_log", "[]") ?: "[]"
         set(v) = p.edit().putString("alarm_log", v).apply()
+
+    /** Vibration-only: spela inget ljud, bara vibrera */
+    var vibrationOnly: Boolean
+        get() = p.getBoolean("vibration_only", false)
+        set(v) = p.edit().putBoolean("vibration_only", v).apply()
+
+    /** Text-to-speech: använd röst istället för larmsignal */
+    var useTts: Boolean
+        get() = p.getBoolean("use_tts", false)
+        set(v) = p.edit().putBoolean("use_tts", v).apply()
 }

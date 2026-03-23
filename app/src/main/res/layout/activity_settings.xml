@@ -175,7 +175,55 @@
                     android:id="@+id/switchTotalAlarm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Trigga larm vid TOTALLARM" />
+                    android:text="Trigga larm vid TOTALLARM"
+                    android:layout_marginBottom="20dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Endast vibration"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:textColor="#212121"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Endast vibration (inget ljud)"
+                    android:textSize="13sp"
+                    android:textColor="#757575"
+                    android:layout_marginBottom="12dp" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchVibrationOnly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Endast vibration (inget ljud)"
+                    android:layout_marginBottom="20dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Text-to-speech larm"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:textColor="#212121"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Appen säger 'TOTALLARM!' med röst"
+                    android:textSize="13sp"
+                    android:textColor="#757575"
+                    android:layout_marginBottom="12dp" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchUseTts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tala larmet (Text-to-speech)" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
