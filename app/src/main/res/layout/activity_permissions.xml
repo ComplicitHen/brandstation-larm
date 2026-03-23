@@ -1,134 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:paddingBottom="24dp">
 
-        <!-- Övergripande status -->
-        <TextView
-            android:id="@+id/overallStatus"
+        <!-- Övergripande statuskort -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:padding="12dp"
-            android:layout_marginBottom="20dp"
-            android:background="#F5F5F5"
-            android:text="Kontrollerar…" />
+            android:layout_margin="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFFFF">
 
-        <!-- Begär normala behörigheter (SMS + notiser) -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnRequestNormal"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Begär SMS- och notisbehörigheter"
-            android:layout_marginBottom="8dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-        <!-- Status för varje behörighet -->
-        <TextView
-            android:id="@+id/statusReceiveSms"
+                <TextView
+                    android:id="@+id/overallStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:text="Kontrollerar…" />
+
+                <!-- Öppna appinställningar - alltid synlig -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnOpenAppSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="Öppna appinställningar →"
+                    android:layout_marginTop="8dp"
+                    app:backgroundTint="#B71C1C" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- SMS + Notiser sektion -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:padding="8dp"
-            android:layout_marginBottom="4dp"
-            android:fontFamily="monospace"
-            android:text="…" />
-
-        <TextView
-            android:id="@+id/statusNotifications"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:padding="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="12dp"
-            android:fontFamily="monospace"
-            android:text="…" />
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFFFF">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider"
-            android:layout_marginBottom="12dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Systembehörigheter (öppnar inställningar)"
-            android:textStyle="bold"
-            android:textSize="13sp"
-            android:layout_marginBottom="8dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NORMALA BEHÖRIGHETER"
+                    android:textSize="11sp"
+                    android:textColor="#9E9E9E"
+                    android:letterSpacing="0.12"
+                    android:layout_marginBottom="12dp" />
 
-        <!-- Batterioptimering -->
-        <TextView
-            android:id="@+id/statusBattery"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:padding="8dp"
-            android:layout_marginBottom="4dp"
-            android:fontFamily="monospace"
-            android:text="…" />
+                <!-- SMS-kort -->
+                <TextView
+                    android:id="@+id/statusReceiveSms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:padding="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="#FFF8F8"
+                    android:text="…" />
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:id="@+id/btnOpenBattery"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="Undanta från batterioptimering →"
-            android:layout_marginBottom="12dp" />
+                <!-- Notiser-kort -->
+                <TextView
+                    android:id="@+id/statusNotifications"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:padding="12dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="#FFF8F8"
+                    android:text="…" />
 
-        <!-- Overlay (visa över andra appar) -->
-        <TextView
-            android:id="@+id/statusOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:padding="8dp"
-            android:layout_marginBottom="4dp"
-            android:fontFamily="monospace"
-            android:text="…" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRequestNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="Begär SMS- och notisbehörigheter"
+                    app:backgroundTint="#B71C1C" />
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:id="@+id/btnOpenOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="Tillåt visning över andra appar →"
-            android:layout_marginBottom="12dp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-        <!-- Helskärmsnotis -->
-        <TextView
-            android:id="@+id/statusFullscreen"
+        <!-- Systembehörigheter sektion -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:padding="8dp"
-            android:layout_marginBottom="4dp"
-            android:fontFamily="monospace"
-            android:text="…" />
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFFFF">
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:id="@+id/btnOpenFullscreen"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="Tillåt helskärmsnotis (Android 14+) →"
-            android:layout_marginBottom="12dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <!-- Notifikationsinställningar -->
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3.Button.TextButton"
-            android:id="@+id/btnOpenNotifSettings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Öppna notifikationsinställningar för appen →" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="SYSTEMBEHÖRIGHETER"
+                    android:textSize="11sp"
+                    android:textColor="#9E9E9E"
+                    android:letterSpacing="0.12"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Batteri -->
+                <TextView
+                    android:id="@+id/statusBattery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:padding="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="#FFF8F8"
+                    android:text="…" />
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:id="@+id/btnOpenBattery"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Undanta från batterioptimering →"
+                    android:textColor="#B71C1C"
+                    app:strokeColor="#B71C1C"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Overlay -->
+                <TextView
+                    android:id="@+id/statusOverlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:padding="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="#FFF8F8"
+                    android:text="…" />
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:id="@+id/btnOpenOverlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Tillåt visning över andra appar →"
+                    android:textColor="#B71C1C"
+                    app:strokeColor="#B71C1C"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Helskärm -->
+                <TextView
+                    android:id="@+id/statusFullscreen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:padding="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="#FFF8F8"
+                    android:text="…" />
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:id="@+id/btnOpenFullscreen"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Tillåt helskärmsnotis (Android 14+) →"
+                    android:textColor="#B71C1C"
+                    app:strokeColor="#B71C1C"
+                    android:layout_marginBottom="16dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:id="@+id/btnOpenNotifSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Öppna notifikationsinställningar →"
+                    android:textColor="#B71C1C"
+                    app:strokeColor="#B71C1C" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 </ScrollView>

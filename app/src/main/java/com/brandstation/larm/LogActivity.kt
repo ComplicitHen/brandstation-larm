@@ -53,6 +53,7 @@ class LogActivity : AppCompatActivity() {
         adapter.setItems(entries)
         binding.tvEmptyLog.visibility = if (entries.isEmpty()) View.VISIBLE else View.GONE
         binding.recyclerLog.visibility = if (entries.isEmpty()) View.GONE else View.VISIBLE
+        binding.tvLogCount.text = "${entries.size} larm"
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -71,7 +72,7 @@ class LogActivity : AppCompatActivity() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
             val v = LayoutInflater.from(parent.context)
-                .inflate(android.R.layout.simple_list_item_2, parent, false)
+                .inflate(R.layout.item_log, parent, false)
             return VH(v)
         }
 
@@ -84,13 +85,21 @@ class LogActivity : AppCompatActivity() {
             val testTag = if (entry.wasTestMode) " [TESTLÄGE]" else ""
             holder.text1.text = "${AlarmLog.formatTime(entry.timestamp)}  •  $typeLabel$testTag"
             holder.text2.text = entry.message.take(120)
+
+            // Färgad vänsterbåge beroende på larmtyp
+            val barColor = when (entry.alarmType) {
+                AlarmType.TOTAL -> 0xFFB71C1C.toInt()  // djupröd — TOTALLARM
+                AlarmType.REGULAR -> 0xFFE65100.toInt() // orange — vanligt larm
+            }
+            holder.colorBar.setBackgroundColor(barColor)
         }
 
         override fun getItemCount() = items.size
 
         inner class VH(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val text1: TextView = itemView.findViewById(android.R.id.text1)
-            val text2: TextView = itemView.findViewById(android.R.id.text2)
+            val text1: TextView = itemView.findViewById(R.id.text1)
+            val text2: TextView = itemView.findViewById(R.id.text2)
+            val colorBar: View = itemView.findViewById(R.id.logColorBar)
         }
     }
 }

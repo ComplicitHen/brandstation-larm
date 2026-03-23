@@ -28,19 +28,19 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <!-- Färgad statusremsa -->
+                <!-- Färgad statusremsa — rundad pill -->
                 <View
                     android:id="@+id/statusIndicator"
                     android:layout_width="match_parent"
                     android:layout_height="8dp"
                     android:layout_marginBottom="16dp"
-                    android:background="#CC0000" />
+                    android:background="@drawable/shape_status_pill" />
 
                 <!-- App-titel -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Brandstation Larm"
+                    android:text="🚒 Brandstation Larm"
                     android:textSize="22sp"
                     android:textStyle="bold"
                     android:textColor="#B71C1C"

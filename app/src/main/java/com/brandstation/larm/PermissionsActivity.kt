@@ -31,6 +31,7 @@ class PermissionsActivity : AppCompatActivity() {
         binding.btnOpenOverlay.setOnClickListener { openOverlaySettings() }
         binding.btnOpenBattery.setOnClickListener { openBatterySettings() }
         binding.btnOpenFullscreen.setOnClickListener { openFullscreenIntentSettings() }
+        binding.btnOpenAppSettings.setOnClickListener { openAppSettings() }
     }
 
     override fun onResume() {
@@ -85,9 +86,33 @@ class PermissionsActivity : AppCompatActivity() {
 
         if (perms.isEmpty()) {
             Toast.makeText(this, "Alla normala behörigheter redan beviljade!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Kolla om någon behörighet är permanent nekad (shouldShowRationale == false OCH saknas)
+        val permanentlyDenied = perms.any { perm ->
+            !ActivityCompat.shouldShowRequestPermissionRationale(this, perm)
+        }
+
+        if (permanentlyDenied) {
+            // Användaren har nekat permanent — öppna appinställningar
+            Toast.makeText(
+                this,
+                "Behörighet permanent nekad. Aktivera manuellt i Inställningar.",
+                Toast.LENGTH_LONG
+            ).show()
+            openAppSettings()
         } else {
             ActivityCompat.requestPermissions(this, perms.toTypedArray(), REQ_PERMS)
         }
+    }
+
+    private fun openAppSettings() {
+        startActivity(
+            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.parse("package:$packageName")
+            }
+        )
     }
 
     private fun openNotificationSettings() {
