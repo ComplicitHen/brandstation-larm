@@ -42,16 +42,6 @@
             android:text="…" />
 
         <TextView
-            android:id="@+id/statusReadSms"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:padding="8dp"
-            android:layout_marginBottom="4dp"
-            android:fontFamily="monospace"
-            android:text="…" />
-
-        <TextView
             android:id="@+id/statusNotifications"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

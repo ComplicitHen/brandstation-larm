@@ -40,7 +40,6 @@ class PermissionsActivity : AppCompatActivity() {
 
     private fun updateStatusDisplay() {
         val smsOk = hasPermission(Manifest.permission.RECEIVE_SMS)
-        val readSmsOk = hasPermission(Manifest.permission.READ_SMS)
         val notifOk = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             hasPermission(Manifest.permission.POST_NOTIFICATIONS)
         } else true
@@ -54,13 +53,12 @@ class PermissionsActivity : AppCompatActivity() {
         } else true
 
         binding.statusReceiveSms.text = statusText("Ta emot SMS (RECEIVE_SMS)", smsOk)
-        binding.statusReadSms.text = statusText("Läsa SMS (READ_SMS)", readSmsOk)
         binding.statusNotifications.text = statusText("Notifikationer", notifOk)
         binding.statusBattery.text = statusText("Undantagen från batterioptimering", batteryOk)
         binding.statusOverlay.text = statusText("Visa över andra appar (overlay)", overlayOk)
         binding.statusFullscreen.text = statusText("Helskärmsnotis vid larm", fullscreenOk)
 
-        val allOk = smsOk && readSmsOk && notifOk && batteryOk
+        val allOk = smsOk && notifOk && batteryOk
         binding.overallStatus.text = if (allOk) {
             "Alla kritiska behörigheter är beviljade"
         } else {
@@ -80,7 +78,6 @@ class PermissionsActivity : AppCompatActivity() {
     private fun requestNormalPermissions() {
         val perms = buildList {
             add(Manifest.permission.RECEIVE_SMS)
-            add(Manifest.permission.READ_SMS)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 add(Manifest.permission.POST_NOTIFICATIONS)
             }

@@ -163,7 +163,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun updatePermissionBadge() {
         val hasSms = hasPermission(Manifest.permission.RECEIVE_SMS)
-        val hasReadSms = hasPermission(Manifest.permission.READ_SMS)
         val hasNotif = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             hasPermission(Manifest.permission.POST_NOTIFICATIONS)
         } else true
@@ -172,7 +171,7 @@ class MainActivity : AppCompatActivity() {
             pm.isIgnoringBatteryOptimizations(packageName)
         }
 
-        val allOk = hasSms && hasReadSms && hasNotif && hasBattery
+        val allOk = hasSms && hasNotif && hasBattery
         binding.btnPermissions.text = if (allOk) {
             "Behörigheter  ✓"
         } else {
@@ -189,7 +188,6 @@ class MainActivity : AppCompatActivity() {
     private fun requestRequiredPermissions() {
         val needed = buildList {
             add(Manifest.permission.RECEIVE_SMS)
-            add(Manifest.permission.READ_SMS)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 add(Manifest.permission.POST_NOTIFICATIONS)
             }
