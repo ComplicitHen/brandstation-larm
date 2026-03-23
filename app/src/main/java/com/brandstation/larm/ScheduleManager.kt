@@ -77,6 +77,23 @@ class ScheduleManager(context: Context) {
     }
 
     /**
+     * Kontrollerar om aktuell tid är inom quiet hours (hanterar övernattsspann, t.ex. 22:00–06:00).
+     */
+    fun isQuietHours(): Boolean {
+        val cal = Calendar.getInstance()
+        val nowMinutes = cal.get(Calendar.HOUR_OF_DAY) * 60 + cal.get(Calendar.MINUTE)
+        val start = prefs.quietStartMinutes
+        val end = prefs.quietEndMinutes
+        return if (start < end) {
+            // Samma dag, t.ex. 10:00–14:00
+            nowMinutes in start until end
+        } else {
+            // Övernatt, t.ex. 22:00–06:00
+            nowMinutes >= start || nowMinutes < end
+        }
+    }
+
+    /**
      * Avgör om ett inkommande SMS ska utlösa larm.
      *
      * Riktiga SMS från VRR Ledningscentral ser ut så här:
@@ -90,7 +107,7 @@ class ScheduleManager(context: Context) {
         if (!prefs.isEnabled) return null
 
         val senderMatch = prefs.smsTestMode ||
-                sender.trim() == prefs.senderNumber.trim()
+            prefs.senderNumber.split(",").map { it.trim() }.any { it == sender.trim() }
         if (!senderMatch) return null
 
         val isTotalAlarm = message.contains(prefs.totalAlarmKeyword, ignoreCase = true)
@@ -99,8 +116,8 @@ class ScheduleManager(context: Context) {
 
         return when {
             isTotalAlarm && prefs.totalAlarmEnabled -> AlarmType.TOTAL
-            isAnyAlarm && isOnDuty()                -> AlarmType.REGULAR
-            else                                    -> null
+            isAnyAlarm && isOnDuty() && !(prefs.quietHoursEnabled && isQuietHours()) -> AlarmType.REGULAR
+            else -> null
         }
     }
 }

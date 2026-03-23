@@ -38,6 +38,11 @@ class AlarmActivity : AppCompatActivity() {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
 
+        // Feature: Max skärmljusstyrka vid larm
+        val lp = window.attributes
+        lp.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL
+        window.attributes = lp
+
         binding = ActivityAlarmBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

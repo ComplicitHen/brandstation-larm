@@ -54,6 +54,11 @@ class LogActivity : AppCompatActivity() {
         binding.tvEmptyLog.visibility = if (entries.isEmpty()) View.VISIBLE else View.GONE
         binding.recyclerLog.visibility = if (entries.isEmpty()) View.GONE else View.VISIBLE
         binding.tvLogCount.text = "${entries.size} larm"
+
+        val stats = AlarmLog.getStats(this)
+        binding.tvStatsTotal.text = "Totalt: ${stats.total}"
+        binding.tvStatsWeek.text = "Denna vecka: ${stats.thisWeek}"
+        binding.tvStatsMonth.text = "Denna månad: ${stats.thisMonth}"
     }
 
     override fun onSupportNavigateUp(): Boolean {

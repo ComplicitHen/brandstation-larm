@@ -1,13 +1,17 @@
 package com.brandstation.larm
 
 import android.app.Activity
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.brandstation.larm.databinding.ActivitySettingsBinding
+import java.util.Locale
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -35,6 +39,38 @@ class SettingsActivity : AppCompatActivity() {
         binding.switchSmsTestMode.isChecked = prefs.smsTestMode
         binding.switchVibrationOnly.isChecked = prefs.vibrationOnly
         binding.switchUseTts.isChecked = prefs.useTts
+
+        // Feature: Auto-dismiss
+        binding.etAutoDismissMinutes.setText(prefs.autoDismissMinutes.toString())
+
+        // Feature: Ficklampa strobe
+        binding.switchFlashlightStrobe.isChecked = prefs.flashlightStrobe
+
+        // Feature: Quiet hours
+        binding.switchQuietHours.isChecked = prefs.quietHoursEnabled
+        binding.layoutQuietHoursTimes.visibility =
+            if (prefs.quietHoursEnabled) View.VISIBLE else View.GONE
+        updateQuietTimeText(binding.tvQuietStart, prefs.quietStartMinutes)
+        updateQuietTimeText(binding.tvQuietEnd, prefs.quietEndMinutes)
+
+        binding.switchQuietHours.setOnCheckedChangeListener { _, checked ->
+            prefs.quietHoursEnabled = checked
+            binding.layoutQuietHoursTimes.visibility = if (checked) View.VISIBLE else View.GONE
+        }
+
+        binding.tvQuietStart.setOnClickListener {
+            showTimePicker(prefs.quietStartMinutes) { mins ->
+                prefs.quietStartMinutes = mins
+                updateQuietTimeText(binding.tvQuietStart, mins)
+            }
+        }
+
+        binding.tvQuietEnd.setOnClickListener {
+            showTimePicker(prefs.quietEndMinutes) { mins ->
+                prefs.quietEndMinutes = mins
+                updateQuietTimeText(binding.tvQuietEnd, mins)
+            }
+        }
 
         binding.switchSmsTestMode.setOnCheckedChangeListener { _, checked ->
             prefs.smsTestMode = checked
@@ -78,6 +114,14 @@ class SettingsActivity : AppCompatActivity() {
             prefs.totalAlarmKeyword = totalKw
             prefs.alarmKeyword = alarmKw
             prefs.totalAlarmEnabled = binding.switchTotalAlarm.isChecked
+
+            // Feature: Auto-dismiss
+            val autoDismissText = binding.etAutoDismissMinutes.text.toString().trim()
+            prefs.autoDismissMinutes = autoDismissText.toIntOrNull() ?: 10
+
+            // Feature: Ficklampa strobe
+            prefs.flashlightStrobe = binding.switchFlashlightStrobe.isChecked
+
             Toast.makeText(this, "Inställningar sparade", Toast.LENGTH_SHORT).show()
             finish()
         }
@@ -97,6 +141,21 @@ class SettingsActivity : AppCompatActivity() {
         binding.btnImportSettings.setOnClickListener {
             showImportDialog()
         }
+    }
+
+    private fun showTimePicker(currentMinutes: Int, onSet: (Int) -> Unit) {
+        TimePickerDialog(
+            this,
+            { _, h, m -> onSet(h * 60 + m) },
+            currentMinutes / 60,
+            currentMinutes % 60,
+            true
+        ).show()
+    }
+
+    private fun updateQuietTimeText(view: TextView, totalMinutes: Int) {
+        view.text = String.format(Locale.getDefault(), "%02d:%02d",
+            totalMinutes / 60, totalMinutes % 60)
     }
 
     // Feature 7: Visa dialog med EditText för inklistrad JSON
@@ -126,6 +185,13 @@ class SettingsActivity : AppCompatActivity() {
                     binding.switchSmsTestMode.isChecked = prefs.smsTestMode
                     binding.switchVibrationOnly.isChecked = prefs.vibrationOnly
                     binding.switchUseTts.isChecked = prefs.useTts
+                    binding.etAutoDismissMinutes.setText(prefs.autoDismissMinutes.toString())
+                    binding.switchFlashlightStrobe.isChecked = prefs.flashlightStrobe
+                    binding.switchQuietHours.isChecked = prefs.quietHoursEnabled
+                    binding.layoutQuietHoursTimes.visibility =
+                        if (prefs.quietHoursEnabled) View.VISIBLE else View.GONE
+                    updateQuietTimeText(binding.tvQuietStart, prefs.quietStartMinutes)
+                    updateQuietTimeText(binding.tvQuietEnd, prefs.quietEndMinutes)
                     Toast.makeText(this, "Inställningar importerade", Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
                     Toast.makeText(this, "Ogiltig JSON: ${e.message}", Toast.LENGTH_LONG).show()

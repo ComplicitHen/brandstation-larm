@@ -24,6 +24,9 @@ class WatchdogReceiver : BroadcastReceiver() {
         val prefs = Prefs(context)
         if (!prefs.isEnabled) return
 
+        // Feature: Kolla batterinivå varje minut
+        BatteryMonitor.checkAndNotify(context)
+
         if (!isAlarmServiceRunning(context)) {
             Log.w("WatchdogReceiver", "AlarmService körs inte — skickar varning")
             sendWatchdogNotification(context)

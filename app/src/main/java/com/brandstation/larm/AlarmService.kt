@@ -23,6 +23,7 @@ class AlarmService : Service() {
     private lateinit var alarmPlayer: AlarmPlayer
     private var wakeLock: PowerManager.WakeLock? = null
     private var isAlarmActive = false
+    private var flashlight: FlashlightStrobe? = null
 
     // Feature 3: Watchdog — dynamisk registrering av TIME_TICK
     private val watchdogReceiver = WatchdogReceiver()
@@ -56,6 +57,10 @@ class AlarmService : Service() {
                 triggerAlarm(alarmType, message, sender)
             }
             ACTION_DISMISS -> dismissAlarm()
+            ACTION_AUTO_DISMISS -> {
+                Log.i(TAG, "Auto-dismiss utlöst")
+                dismissAlarm()
+            }
             ACTION_START_MONITOR -> {
                 // Uppdatera statusnotisen
                 val nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -106,6 +111,18 @@ class AlarmService : Service() {
 
         // Feature 6: Schemalägg upprepning om 3 minuter
         scheduleRepeat(alarmType, message)
+
+        // Feature: Ficklampa strobe
+        val prefs = Prefs(this)
+        if (prefs.flashlightStrobe) {
+            flashlight = FlashlightStrobe(this).also { it.start() }
+        }
+
+        // Feature: Auto-dismiss
+        val autoDismissMin = prefs.autoDismissMinutes
+        if (autoDismissMin > 0) {
+            scheduleAutoDismiss(autoDismissMin)
+        }
 
         // Starta AlarmActivity som visas ovanpå låsskärmen
         val alarmIntent = Intent(this, AlarmActivity::class.java).apply {
@@ -158,11 +175,47 @@ class AlarmService : Service() {
         wakeLock?.release()
         wakeLock = null
         cancelRepeat()
+        cancelAutoDismiss()
+        flashlight?.stop()
+        flashlight = null
         val nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         nm.cancel(NOTIF_ALARM)
         // Uppdatera statusnotisen
         nm.notify(NOTIF_MONITOR, buildMonitorNotification())
         Log.i(TAG, "Larm avslutat")
+    }
+
+    // Feature: Schemalägg auto-dismiss
+    private fun scheduleAutoDismiss(minutes: Int) {
+        val autoDismissIntent = Intent(this, AlarmService::class.java).apply {
+            action = ACTION_AUTO_DISMISS
+        }
+        val pi = PendingIntent.getService(
+            this, REQ_AUTO_DISMISS, autoDismissIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val triggerAt = System.currentTimeMillis() + minutes * 60_000L
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pi)
+        } else {
+            am.setExact(AlarmManager.RTC_WAKEUP, triggerAt, pi)
+        }
+    }
+
+    // Feature: Avbryt schemalagd auto-dismiss
+    private fun cancelAutoDismiss() {
+        val autoDismissIntent = Intent(this, AlarmService::class.java).apply {
+            action = ACTION_AUTO_DISMISS
+        }
+        val pi = PendingIntent.getService(
+            this, REQ_AUTO_DISMISS, autoDismissIntent,
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+        )
+        pi?.let {
+            val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            am.cancel(it)
+        }
     }
 
     private fun showAlarmNotification(alarmType: AlarmType, message: String) {
@@ -274,6 +327,8 @@ class AlarmService : Service() {
         const val ACTION_START_MONITOR = "com.brandstation.larm.START_MONITOR"
         // Feature 6
         const val ACTION_REPEAT = "com.brandstation.larm.REPEAT"
+        // Feature: Auto-dismiss
+        const val ACTION_AUTO_DISMISS = "com.brandstation.larm.AUTO_DISMISS"
 
         const val EXTRA_ALARM_TYPE = "alarm_type"
         const val EXTRA_MESSAGE = "message"
@@ -286,5 +341,6 @@ class AlarmService : Service() {
         const val NOTIF_ALARM = 2
 
         private const val REQ_REPEAT = 300
+        private const val REQ_AUTO_DISMISS = 400
     }
 }

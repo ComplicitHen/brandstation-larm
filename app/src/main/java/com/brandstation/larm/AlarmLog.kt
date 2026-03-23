@@ -4,6 +4,7 @@ import android.content.Context
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -65,4 +66,31 @@ object AlarmLog {
     fun clear(context: Context) {
         Prefs(context).alarmLogJson = "[]"
     }
+
+    fun getStats(context: Context): AlarmStats {
+        val entries = getAll(context)
+        val total = entries.size
+        val totalAlarms = entries.count { it.alarmType == AlarmType.TOTAL }
+        val regularAlarms = entries.count { it.alarmType == AlarmType.REGULAR }
+
+        val now = Calendar.getInstance()
+        val weekAgo = System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1000L
+        val thisWeek = entries.count { it.timestamp >= weekAgo }
+
+        val thisMonth = entries.count { entry ->
+            val cal = Calendar.getInstance().apply { timeInMillis = entry.timestamp }
+            cal.get(Calendar.YEAR) == now.get(Calendar.YEAR) &&
+                cal.get(Calendar.MONTH) == now.get(Calendar.MONTH)
+        }
+
+        return AlarmStats(total, totalAlarms, regularAlarms, thisWeek, thisMonth)
+    }
 }
+
+data class AlarmStats(
+    val total: Int,
+    val totalAlarms: Int,
+    val regularAlarms: Int,
+    val thisWeek: Int,
+    val thisMonth: Int,
+)

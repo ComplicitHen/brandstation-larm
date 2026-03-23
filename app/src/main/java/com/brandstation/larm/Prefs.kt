@@ -76,4 +76,34 @@ class Prefs(context: Context) {
     var useTts: Boolean
         get() = p.getBoolean("use_tts", false)
         set(v) = p.edit().putBoolean("use_tts", v).apply()
+
+    // Feature: Auto-dismiss efter X minuter (0 = aldrig)
+    var autoDismissMinutes: Int
+        get() = p.getInt("auto_dismiss_min", 10)
+        set(v) = p.edit().putInt("auto_dismiss_min", v).apply()
+
+    // Feature: Batterinivå-varning — tidsstämpel för senaste varning
+    var batteryWarnedAt: Long
+        get() = p.getLong("battery_warned_at", 0L)
+        set(v) = p.edit().putLong("battery_warned_at", v).apply()
+
+    // Feature: Ficklampa blinkar vid larm
+    var flashlightStrobe: Boolean
+        get() = p.getBoolean("flashlight_strobe", false)
+        set(v) = p.edit().putBoolean("flashlight_strobe", v).apply()
+
+    // Feature: Larmfri tid (tyst nattetid för vanliga larm)
+    var quietHoursEnabled: Boolean
+        get() = p.getBoolean("quiet_hours_enabled", false)
+        set(v) = p.edit().putBoolean("quiet_hours_enabled", v).apply()
+
+    /** Quiet hours start, minuter från midnatt. Standard 22:00 = 1320 */
+    var quietStartMinutes: Int
+        get() = p.getInt("quiet_start", 22 * 60)
+        set(v) = p.edit().putInt("quiet_start", v).apply()
+
+    /** Quiet hours slut, minuter från midnatt. Standard 06:00 = 360 */
+    var quietEndMinutes: Int
+        get() = p.getInt("quiet_end", 6 * 60)
+        set(v) = p.edit().putInt("quiet_end", v).apply()
 }
