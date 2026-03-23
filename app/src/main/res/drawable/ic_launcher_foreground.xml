@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Enkel brandklocka som ikon -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,20 C40,20 30,30 30,44 L30,60 L24,70 L84,70 L78,60 L78,44 C78,30 68,20 54,20 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M46,72 C46,76.4 49.6,80 54,80 C58.4,80 62,76.4 62,72 Z" />
+    <rect
+        android:fillColor="#FFFFFF"
+        android:left="51"
+        android:top="10"
+        android:right="57"
+        android:bottom="22" />
+</vector>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/alarmCard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="32dp">
+
+            <TextView
+                android:id="@+id/alarmTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LARM"
+                android:textSize="64sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="24dp" />
+
+            <TextView
+                android:id="@+id/alarmMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#EEEEEE"
+                android:gravity="center"
+                android:layout_marginBottom="64dp"
+                android:padding="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/dismissButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="STÄNG AV LARM"
+                android:textSize="18sp"
+                android:paddingHorizontal="40dp"
+                android:paddingVertical="16dp"
+                android:backgroundTint="#FFFFFF"
+                android:textColor="#000000" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</FrameLayout>

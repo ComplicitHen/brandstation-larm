@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#CC0000</color>
+    <color name="colorPrimaryDark">#990000</color>
+    <color name="colorAccent">#FF6600</color>
+
+    <color name="status_green">#2E7D32</color>
+    <color name="status_orange">#E65100</color>
+    <color name="status_gray">#757575</color>
+
+    <color name="ic_launcher_background">#CC0000</color>
+</resources>
