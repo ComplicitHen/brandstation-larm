@@ -3,9 +3,9 @@ package com.brandstation.larm
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
 import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         updateStatusDisplay()
         binding.enableSwitch.isChecked = prefs.isEnabled
+        updatePermissionBadge()
     }
 
     private fun setupUI() {
@@ -56,14 +57,20 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
 
-        // Testknapp: Totallarm — triggar direkt utan att skicka SMS
+        binding.btnPermissions.setOnClickListener {
+            startActivity(Intent(this, PermissionsActivity::class.java))
+        }
+
+        // Testknapp: Totallarm — triggar direkt, testar larm + vibration
         binding.btnTestTotal.setOnClickListener {
-            triggerTestAlarm(AlarmType.TOTAL, "TOTALLARM Testlarm från appen")
+            triggerTestAlarm(AlarmType.TOTAL,
+                "Larminformation från VRR Ledningscentral\nTOTALLARM - Fri inryckning\nTID : TESTLARM")
         }
 
         // Testknapp: Vanligt larm
         binding.btnTestRegular.setOnClickListener {
-            triggerTestAlarm(AlarmType.REGULAR, "Larm 2:42 Testlarm från appen")
+            triggerTestAlarm(AlarmType.REGULAR,
+                "Larminformation från VRR Ledningscentral\nLARM Mölnlycke RIB\nTID : TESTLARM")
         }
 
         // Stäng av pågående larm
@@ -73,11 +80,6 @@ class MainActivity : AppCompatActivity() {
             }
             startService(intent)
             Toast.makeText(this, "Larm stängt av", Toast.LENGTH_SHORT).show()
-        }
-
-        // Batterioptimering: visa systeminställning
-        binding.btnBatteryOpt.setOnClickListener {
-            openBatteryOptimizationSettings()
         }
     }
 
@@ -93,15 +95,44 @@ class MainActivity : AppCompatActivity() {
     private fun updateStatusDisplay() {
         val enabled = prefs.isEnabled
         val onDuty = enabled && scheduleManager.isOnDuty()
+        val testMode = prefs.smsTestMode
 
-        val (statusText, color) = when {
-            !enabled -> Pair("Inaktiverad", getColor(android.R.color.darker_gray))
-            onDuty   -> Pair("På pass – övervakar alla larm", getColor(R.color.status_green))
-            else     -> Pair("Utanför schema – endast totallarm", getColor(R.color.status_orange))
+        val statusText = when {
+            !enabled -> "Inaktiverad"
+            testMode && onDuty -> "SMS-TESTLÄGE PÅ – på pass"
+            testMode -> "SMS-TESTLÄGE PÅ – alla avsändare accepteras"
+            onDuty   -> "På pass – alla larm aktiva"
+            else     -> "Utanför schema – endast totallarm"
+        }
+
+        val color = when {
+            !enabled -> getColor(R.color.status_gray)
+            testMode -> getColor(android.R.color.holo_blue_dark)
+            onDuty   -> getColor(R.color.status_green)
+            else     -> getColor(R.color.status_orange)
         }
 
         binding.tvStatus.text = statusText
         binding.statusIndicator.setBackgroundColor(color)
+    }
+
+    private fun updatePermissionBadge() {
+        val hasSms = hasPermission(Manifest.permission.RECEIVE_SMS)
+        val hasReadSms = hasPermission(Manifest.permission.READ_SMS)
+        val hasNotif = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            hasPermission(Manifest.permission.POST_NOTIFICATIONS)
+        } else true
+        val hasBattery = run {
+            val pm = getSystemService(POWER_SERVICE) as PowerManager
+            pm.isIgnoringBatteryOptimizations(packageName)
+        }
+
+        val allOk = hasSms && hasReadSms && hasNotif && hasBattery
+        binding.btnPermissions.text = if (allOk) {
+            "Behörigheter  ✓"
+        } else {
+            "Behörigheter  ⚠ KRÄVER ÅTGÄRD"
+        }
     }
 
     private fun ensureServiceRunning() {
@@ -111,16 +142,6 @@ class MainActivity : AppCompatActivity() {
         startForegroundService(intent)
     }
 
-    private fun openBatteryOptimizationSettings() {
-        val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
-            data = Uri.parse("package:$packageName")
-        }
-        runCatching { startActivity(intent) }
-            ?: run {
-                startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
-            }
-    }
-
     private fun requestRequiredPermissions() {
         val needed = buildList {
             add(Manifest.permission.RECEIVE_SMS)
@@ -128,30 +149,20 @@ class MainActivity : AppCompatActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 add(Manifest.permission.POST_NOTIFICATIONS)
             }
-        }.filter {
-            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
-        }
+        }.filter { !hasPermission(it) }
 
         if (needed.isNotEmpty()) {
             ActivityCompat.requestPermissions(this, needed.toTypedArray(), 100)
         }
     }
 
+    private fun hasPermission(perm: String) =
+        ContextCompat.checkSelfPermission(this, perm) == PackageManager.PERMISSION_GRANTED
+
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 100) {
-            val denied = permissions.zip(grantResults.toList())
-                .filter { it.second != PackageManager.PERMISSION_GRANTED }
-                .map { it.first }
-            if (denied.isNotEmpty()) {
-                Toast.makeText(
-                    this,
-                    "Saknade rättigheter: ${denied.joinToString()}\nAppen fungerar inte utan dessa.",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        }
+        if (requestCode == 100) updatePermissionBadge()
     }
 }

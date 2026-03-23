@@ -10,7 +10,7 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Statusindikator -->
+        <!-- Statusindikator (färgad remsa) -->
         <View
             android:id="@+id/statusIndicator"
             android:layout_width="match_parent"
@@ -22,12 +22,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="18sp"
+            android:textSize="17sp"
             android:textStyle="bold"
             android:layout_marginBottom="20dp"
             android:text="Laddar…" />
 
-        <!-- På/Av -->
+        <!-- På/Av-toggle -->
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/enableSwitch"
             android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
             android:layout_gravity="center_horizontal"
             android:text="Larmövervakning aktiv"
             android:textSize="16sp"
-            android:layout_marginBottom="28dp" />
+            android:layout_marginBottom="24dp" />
 
         <!-- Konfiguration -->
         <com.google.android.material.button.MaterialButton
@@ -46,12 +46,21 @@
             android:layout_marginBottom="8dp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSettings"
             style="@style/Widget.Material3.Button.OutlinedButton"
+            android:id="@+id/btnSettings"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Inställningar (avsändare / nyckelord)"
-            android:layout_marginBottom="28dp" />
+            android:text="Inställningar"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Behörighetsknapp — visar varning om något saknas -->
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:id="@+id/btnPermissions"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Behörigheter"
+            android:layout_marginBottom="24dp" />
 
         <!-- Avdelare -->
         <View
@@ -63,10 +72,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TEST"
+            android:text="TESTA LARM"
             android:textStyle="bold"
             android:textSize="13sp"
             android:letterSpacing="0.1"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Knapparna nedan triggar larmet direkt i appen. För att testa hela SMS-kedjan: aktivera SMS-testläge i Inställningar, smsa TOTALLARM eller LARM till dig själv."
+            android:textSize="12sp"
+            android:textColor="?android:textColorSecondary"
             android:layout_marginBottom="12dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -86,27 +103,11 @@
             android:layout_marginBottom="20dp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnStopAlarm"
             style="@style/Widget.Material3.Button.OutlinedButton"
+            android:id="@+id/btnStopAlarm"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="Stäng av pågående larm"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Avdelare -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider"
-            android:layout_marginBottom="16dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnBatteryOpt"
-            style="@style/Widget.Material3.Button.TextButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Undanta appen från batterioptimering →"
-            android:textSize="13sp" />
+            android:text="Stäng av pågående larm" />
 
     </LinearLayout>
 </ScrollView>

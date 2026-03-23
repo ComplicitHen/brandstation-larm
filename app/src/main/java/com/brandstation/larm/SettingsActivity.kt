@@ -22,22 +22,32 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.etSenderNumber.setText(prefs.senderNumber)
         binding.etTotalAlarmKeyword.setText(prefs.totalAlarmKeyword)
+        binding.etAlarmKeyword.setText(prefs.alarmKeyword)
+        binding.switchSmsTestMode.isChecked = prefs.smsTestMode
+
+        binding.switchSmsTestMode.setOnCheckedChangeListener { _, checked ->
+            prefs.smsTestMode = checked
+            if (checked) {
+                Toast.makeText(
+                    this,
+                    "SMS-testläge PÅ — appen triggar nu på SMS från alla avsändare!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
 
         binding.btnSave.setOnClickListener {
             val sender = binding.etSenderNumber.text.toString().trim()
-            val keyword = binding.etTotalAlarmKeyword.text.toString().trim()
+            val totalKw = binding.etTotalAlarmKeyword.text.toString().trim()
+            val alarmKw = binding.etAlarmKeyword.text.toString().trim()
 
-            if (sender.isEmpty()) {
-                binding.etSenderNumber.error = "Fyll i avsändarnummer"
-                return@setOnClickListener
-            }
-            if (keyword.isEmpty()) {
-                binding.etTotalAlarmKeyword.error = "Fyll i nyckelord"
-                return@setOnClickListener
-            }
+            if (sender.isEmpty()) { binding.etSenderNumber.error = "Fyll i avsändarnummer"; return@setOnClickListener }
+            if (totalKw.isEmpty()) { binding.etTotalAlarmKeyword.error = "Fyll i nyckelord"; return@setOnClickListener }
+            if (alarmKw.isEmpty()) { binding.etAlarmKeyword.error = "Fyll i nyckelord"; return@setOnClickListener }
 
             prefs.senderNumber = sender
-            prefs.totalAlarmKeyword = keyword
+            prefs.totalAlarmKeyword = totalKw
+            prefs.alarmKeyword = alarmKw
             Toast.makeText(this, "Inställningar sparade", Toast.LENGTH_SHORT).show()
             finish()
         }

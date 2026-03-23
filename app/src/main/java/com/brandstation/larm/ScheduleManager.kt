@@ -8,9 +8,6 @@ enum class AlarmType { REGULAR, TOTAL }
 class ScheduleManager(context: Context) {
     private val prefs = Prefs(context)
 
-    /**
-     * Returnerar true om nuvarande tid faller inom schemat för vanligt jour.
-     */
     fun isOnDuty(): Boolean {
         val cal = Calendar.getInstance()
         val bitIndex = when (cal.get(Calendar.DAY_OF_WEEK)) {
@@ -32,21 +29,30 @@ class ScheduleManager(context: Context) {
     }
 
     /**
-     * Avgör om ett inkommande SMS ska utlösa larm och i så fall vilket typ.
-     * - Under schema: vanligt larm ELLER totallarm
-     * - Utanför schema: endast totallarm
-     * Returnerar null om inget larm ska utlösas.
+     * Avgör om ett inkommande SMS ska utlösa larm.
+     *
+     * Riktiga SMS från VRR Ledningscentral ser ut så här:
+     *   TOTALLARM: innehåller "TOTALLARM"
+     *   Vanligt:   innehåller "LARM" men inte "TOTALLARM"
+     *
+     * SMS-testläge (smsTestMode=true): avsändarkontrollen hoppas över
+     * så att man kan smsa till sig själv för att testa hela kedjan.
      */
     fun shouldTrigger(sender: String, message: String): AlarmType? {
         if (!prefs.isEnabled) return null
-        if (sender.trim() != prefs.senderNumber.trim()) return null
+
+        val senderMatch = prefs.smsTestMode ||
+                sender.trim() == prefs.senderNumber.trim()
+        if (!senderMatch) return null
 
         val isTotalAlarm = message.contains(prefs.totalAlarmKeyword, ignoreCase = true)
+        // "LARM" finns i båda typerna — det räcker att meddelandet innehåller det
+        val isAnyAlarm = message.contains(prefs.alarmKeyword, ignoreCase = true)
 
         return when {
-            isTotalAlarm  -> AlarmType.TOTAL
-            isOnDuty()    -> AlarmType.REGULAR
-            else          -> null   // Utanför schema, inget totallarm → ignorera
+            isTotalAlarm           -> AlarmType.TOTAL
+            isAnyAlarm && isOnDuty() -> AlarmType.REGULAR
+            else                   -> null
         }
     }
 }

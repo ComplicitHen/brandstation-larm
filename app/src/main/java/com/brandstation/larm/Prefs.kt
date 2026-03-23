@@ -15,9 +15,15 @@ class Prefs(context: Context) {
         get() = p.getString("sender", "3315") ?: "3315"
         set(v) = p.edit().putString("sender", v).apply()
 
+    /** Nyckelord i SMS som identifierar TOTALLARM. Standard matchar VRR: "TOTALLARM" */
     var totalAlarmKeyword: String
         get() = p.getString("totallarm_kw", "TOTALLARM") ?: "TOTALLARM"
         set(v) = p.edit().putString("totallarm_kw", v).apply()
+
+    /** Nyckelord i SMS som identifierar vanligt larm. Standard matchar VRR: "LARM" */
+    var alarmKeyword: String
+        get() = p.getString("alarm_kw", "LARM") ?: "LARM"
+        set(v) = p.edit().putString("alarm_kw", v).apply()
 
     /**
      * Passdagar som bitmask: bit 0 = måndag, bit 6 = söndag.
@@ -36,4 +42,12 @@ class Prefs(context: Context) {
     var dutyEndMinutes: Int
         get() = p.getInt("duty_end", 22 * 60)
         set(v) = p.edit().putInt("duty_end", v).apply()
+
+    /**
+     * SMS-testläge: när PÅ accepteras SMS från ALLA avsändare (inte bara senderNumber).
+     * Används för att testa hela SMS-kedjan genom att smsa till sig själv.
+     */
+    var smsTestMode: Boolean
+        get() = p.getBoolean("sms_test_mode", false)
+        set(v) = p.edit().putBoolean("sms_test_mode", v).apply()
 }
