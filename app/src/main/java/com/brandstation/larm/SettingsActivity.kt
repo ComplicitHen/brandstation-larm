@@ -72,6 +72,24 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
+        // Geo-filter
+        binding.switchGeoFilter.isChecked = prefs.geoFilterEnabled
+        binding.layoutGeoSettings.visibility = if (prefs.geoFilterEnabled) View.VISIBLE else View.GONE
+        binding.etStationLat.setText(prefs.stationLat.toString())
+        binding.etStationLng.setText(prefs.stationLng.toString())
+        binding.etGeoRadius.setText(prefs.geoRadiusKm.toString())
+
+        binding.switchGeoFilter.setOnCheckedChangeListener { _, checked ->
+            prefs.geoFilterEnabled = checked
+            binding.layoutGeoSettings.visibility = if (checked) View.VISIBLE else View.GONE
+            if (checked) {
+                LocationWorker.schedule(this)
+                Toast.makeText(this, "Platsfilter aktiverat — uppdaterar position var 30:e min", Toast.LENGTH_SHORT).show()
+            } else {
+                LocationWorker.cancel(this)
+            }
+        }
+
         binding.switchSmsTestMode.setOnCheckedChangeListener { _, checked ->
             prefs.smsTestMode = checked
             if (checked) {
@@ -121,6 +139,12 @@ class SettingsActivity : AppCompatActivity() {
 
             // Feature: Ficklampa strobe
             prefs.flashlightStrobe = binding.switchFlashlightStrobe.isChecked
+
+            // Geo-filter
+            prefs.geoFilterEnabled = binding.switchGeoFilter.isChecked
+            binding.etStationLat.text.toString().toDoubleOrNull()?.let { prefs.stationLat = it }
+            binding.etStationLng.text.toString().toDoubleOrNull()?.let { prefs.stationLng = it }
+            binding.etGeoRadius.text.toString().toIntOrNull()?.let { prefs.geoRadiusKm = it }
 
             Toast.makeText(this, "Inställningar sparade", Toast.LENGTH_SHORT).show()
             finish()

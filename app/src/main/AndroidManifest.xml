@@ -29,6 +29,12 @@
     <!-- Krävs för att kunna be om undantag från batterioptimering direkt -->
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
+    <!-- Geolokalisering (grov position räcker — celltorn/WiFi) -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- Bakgrundsplats (WorkManager var 30:e min) -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:label="@string/app_name"

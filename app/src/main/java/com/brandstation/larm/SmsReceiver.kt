@@ -28,6 +28,13 @@ class SmsReceiver : BroadcastReceiver() {
 
         Log.i(TAG, "Larmar! Typ: $alarmType")
 
+        // Geo-filter: skippa larm om användaren är utanför radie
+        val prefs = Prefs(context)
+        if (prefs.geoFilterEnabled && !prefs.withinRadius) {
+            Log.i(TAG, "Geo-filter: utanför radie — ignorerar larm")
+            return
+        }
+
         // Skicka till AlarmService — om tjänsten redan kör som foreground
         // räcker startService(), annars startForegroundService()
         val serviceIntent = Intent(context, AlarmService::class.java)

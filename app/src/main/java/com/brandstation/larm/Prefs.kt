@@ -106,4 +106,31 @@ class Prefs(context: Context) {
     var quietEndMinutes: Int
         get() = p.getInt("quiet_end", 6 * 60)
         set(v) = p.edit().putInt("quiet_end", v).apply()
+
+    // Geolokalisering
+    var geoFilterEnabled: Boolean
+        get() = p.getBoolean("geo_filter_enabled", false)
+        set(v) = p.edit().putBoolean("geo_filter_enabled", v).apply()
+
+    var stationLat: Double
+        get() = p.getString("station_lat", "57.656563")!!.toDoubleOrNull() ?: 57.656563
+        set(v) = p.edit().putString("station_lat", v.toString()).apply()
+
+    var stationLng: Double
+        get() = p.getString("station_lng", "12.114100")!!.toDoubleOrNull() ?: 12.114100
+        set(v) = p.edit().putString("station_lng", v.toString()).apply()
+
+    var geoRadiusKm: Int
+        get() = p.getInt("geo_radius_km", 25)
+        set(v) = p.edit().putInt("geo_radius_km", v).apply()
+
+    /** Cachat svar: är användaren inom radie? Uppdateras av LocationWorker var 30:e min */
+    var withinRadius: Boolean
+        get() = p.getBoolean("within_radius", true) // default true = larma om position okänd
+        set(v) = p.edit().putBoolean("within_radius", v).apply()
+
+    /** Tidsstämpel för senaste positionskoll */
+    var lastLocationCheckMs: Long
+        get() = p.getLong("last_location_check_ms", 0L)
+        set(v) = p.edit().putLong("last_location_check_ms", v).apply()
 }
