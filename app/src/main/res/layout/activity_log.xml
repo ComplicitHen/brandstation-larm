@@ -4,16 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F5F5F5">
+    android:background="@color/colorBackground">
 
-    <!-- Header-kort med antal larm -->
+    <!-- Header -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="4dp"
-        app:cardBackgroundColor="#B71C1C">
+        app:cardCornerRadius="20dp"
+        app:cardElevation="3dp"
+        app:cardBackgroundColor="@color/colorPrimary">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,10 +26,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="🚒 Larmlogg"
+                android:text="🚒  Larmlogg"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF" />
+                android:textColor="@color/textOnPrimary" />
 
             <TextView
                 android:id="@+id/tvLogCount"
@@ -42,30 +42,25 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Statistik-kort -->
+    <!-- Statistik -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        app:cardCornerRadius="12dp"
+        app:cardCornerRadius="16dp"
         app:cardElevation="2dp"
-        app:cardBackgroundColor="#FFFFFF">
+        app:cardBackgroundColor="@color/colorSurface">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="12dp">
+            android:padding="16dp">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
-
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical" android:gravity="center">
                 <TextView
                     android:id="@+id/tvStatsTotal"
                     android:layout_width="wrap_content"
@@ -73,17 +68,11 @@
                     android:text="Totalt: 0"
                     android:textSize="13sp"
                     android:textStyle="bold"
-                    android:textColor="#212121" />
-
+                    android:textColor="@color/textPrimary" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
-
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical" android:gravity="center">
                 <TextView
                     android:id="@+id/tvStatsWeek"
                     android:layout_width="wrap_content"
@@ -91,31 +80,25 @@
                     android:text="Denna vecka: 0"
                     android:textSize="13sp"
                     android:textStyle="bold"
-                    android:textColor="#212121" />
-
+                    android:textColor="@color/textPrimary" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
-
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical" android:gravity="center">
                 <TextView
                     android:id="@+id/tvStatsMonth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Denna månad: 0"
+                    android:text="Månad: 0"
                     android:textSize="13sp"
                     android:textStyle="bold"
-                    android:textColor="#212121" />
-
+                    android:textColor="@color/textPrimary" />
             </LinearLayout>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
+    <!-- Logglista -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerLog"
         android:layout_width="match_parent"
@@ -126,6 +109,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp" />
 
+    <!-- Tom-text -->
     <TextView
         android:id="@+id/tvEmptyLog"
         android:layout_width="match_parent"
@@ -133,18 +117,21 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="Inga larm registrerade ännu."
-        android:textColor="#9E9E9E"
+        android:textColor="@color/textSecondary"
         android:textSize="15sp"
         android:visibility="gone" />
 
+    <!-- Rensa-knapp -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnClearLog"
-        style="@style/Widget.Material3.Button.OutlinedButton"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:layout_margin="16dp"
-        android:text="Rensa logg"
-        android:textColor="#B71C1C"
-        app:strokeColor="#B71C1C" />
+        android:text="🗑️  Rensa logg"
+        android:textColor="@color/colorPrimary"
+        android:textSize="15sp"
+        app:strokeColor="@color/colorPrimary"
+        app:cornerRadius="12dp" />
 
 </LinearLayout>

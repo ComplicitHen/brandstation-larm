@@ -1,13 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.BrandstationLarm" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+    <!-- Huvudtema: ALLTID ljust (löser text-osynligt-på-mörk-bakgrund) -->
+    <style name="Theme.BrandstationLarm" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- Bakgrundsfärger -->
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+
+        <!-- Text alltid mörk -->
+        <item name="android:textColorPrimary">@color/textPrimary</item>
+        <item name="android:textColorSecondary">@color/textSecondary</item>
+        <item name="android:textColorHint">@color/textHint</item>
+
+        <!-- Switch / checkbox aktiv färg = röd -->
+        <item name="colorControlActivated">@color/colorPrimary</item>
+
+        <!-- Action bar: röd bakgrund, vit text och pil -->
+        <item name="actionBarStyle">@style/AppActionBar</item>
+        <item name="actionBarTheme">@style/AppActionBarTheme</item>
     </style>
 
+    <!-- Ingen action bar (AlarmActivity) -->
     <style name="Theme.BrandstationLarm.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <!-- Röd action bar -->
+    <style name="AppActionBar" parent="Widget.AppCompat.ActionBar.Solid">
+        <item name="background">@color/colorPrimary</item>
+        <item name="titleTextStyle">@style/AppActionBarTitle</item>
+    </style>
+
+    <!-- Gör tillbaka-pilen vit -->
+    <style name="AppActionBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorControlNormal">@color/textOnPrimary</item>
+    </style>
+
+    <style name="AppActionBarTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/textOnPrimary</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
 </resources>

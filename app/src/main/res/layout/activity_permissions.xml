@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="@color/colorBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="24dp">
+        android:paddingBottom="32dp">
 
-        <!-- Övergripande statuskort -->
+        <!-- Övergripande status -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF">
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -32,177 +32,191 @@
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:textStyle="bold"
+                    android:textColor="@color/textPrimary"
                     android:gravity="center"
                     android:padding="12dp"
                     android:text="Kontrollerar…" />
 
-                <!-- Öppna appinställningar - alltid synlig -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnOpenAppSettings"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:text="Öppna appinställningar →"
+                    android:text="⚙️  Öppna appinställningar"
+                    android:textColor="@color/textOnPrimary"
+                    android:textSize="15sp"
                     android:layout_marginTop="8dp"
-                    app:backgroundTint="#B71C1C" />
+                    app:backgroundTint="@color/colorPrimary"
+                    app:cornerRadius="12dp" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- SMS + Notiser sektion -->
+        <!-- Normala behörigheter -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="12dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF">
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="NORMALA BEHÖRIGHETER"
                     android:textSize="11sp"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/textSecondary"
                     android:letterSpacing="0.12"
                     android:layout_marginBottom="12dp" />
 
-                <!-- SMS-kort -->
                 <TextView
                     android:id="@+id/statusReceiveSms"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:padding="12dp"
+                    android:textColor="@color/textPrimary"
+                    android:padding="14dp"
                     android:layout_marginBottom="8dp"
-                    android:background="#FFF8F8"
+                    android:background="@color/colorSurfaceVariant"
                     android:text="…" />
 
-                <!-- Notiser-kort -->
                 <TextView
                     android:id="@+id/statusNotifications"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:padding="12dp"
+                    android:textColor="@color/textPrimary"
+                    android:padding="14dp"
                     android:layout_marginBottom="16dp"
-                    android:background="#FFF8F8"
+                    android:background="@color/colorSurfaceVariant"
                     android:text="…" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnRequestNormal"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:text="Begär SMS- och notisbehörigheter"
-                    app:backgroundTint="#B71C1C" />
+                    android:text="🔐  Begär SMS- och notisbehörigheter"
+                    android:textColor="@color/textOnPrimary"
+                    android:textSize="15sp"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:cornerRadius="12dp" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Systembehörigheter sektion -->
+        <!-- Systembehörigheter -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF">
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="SYSTEMBEHÖRIGHETER"
                     android:textSize="11sp"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/textSecondary"
                     android:letterSpacing="0.12"
                     android:layout_marginBottom="12dp" />
 
-                <!-- Batteri -->
                 <TextView
                     android:id="@+id/statusBattery"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:padding="12dp"
+                    android:textColor="@color/textPrimary"
+                    android:padding="14dp"
                     android:layout_marginBottom="8dp"
-                    android:background="#FFF8F8"
+                    android:background="@color/colorSurfaceVariant"
                     android:text="…" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:id="@+id/btnOpenBattery"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:text="Undanta från batterioptimering →"
-                    android:textColor="#B71C1C"
-                    app:strokeColor="#B71C1C"
+                    android:text="🔋  Undanta från batterioptimering"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    app:strokeColor="@color/colorPrimary"
+                    app:cornerRadius="10dp"
                     android:layout_marginBottom="16dp" />
 
-                <!-- Overlay -->
                 <TextView
                     android:id="@+id/statusOverlay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:padding="12dp"
+                    android:textColor="@color/textPrimary"
+                    android:padding="14dp"
                     android:layout_marginBottom="8dp"
-                    android:background="#FFF8F8"
+                    android:background="@color/colorSurfaceVariant"
                     android:text="…" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:id="@+id/btnOpenOverlay"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:text="Tillåt visning över andra appar →"
-                    android:textColor="#B71C1C"
-                    app:strokeColor="#B71C1C"
+                    android:text="🪟  Tillåt visning över andra appar"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    app:strokeColor="@color/colorPrimary"
+                    app:cornerRadius="10dp"
                     android:layout_marginBottom="16dp" />
 
-                <!-- Helskärm -->
                 <TextView
                     android:id="@+id/statusFullscreen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:padding="12dp"
+                    android:textColor="@color/textPrimary"
+                    android:padding="14dp"
                     android:layout_marginBottom="8dp"
-                    android:background="#FFF8F8"
+                    android:background="@color/colorSurfaceVariant"
                     android:text="…" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:id="@+id/btnOpenFullscreen"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:text="Tillåt helskärmsnotis (Android 14+) →"
-                    android:textColor="#B71C1C"
-                    app:strokeColor="#B71C1C"
+                    android:text="📱  Tillåt helskärmsnotis (Android 14+)"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    app:strokeColor="@color/colorPrimary"
+                    app:cornerRadius="10dp"
                     android:layout_marginBottom="16dp" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:id="@+id/btnOpenNotifSettings"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:text="Öppna notifikationsinställningar →"
-                    android:textColor="#B71C1C"
-                    app:strokeColor="#B71C1C" />
+                    android:text="🔔  Öppna notifikationsinställningar"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    app:strokeColor="@color/colorPrimary"
+                    app:cornerRadius="10dp" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

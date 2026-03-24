@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
+    android:background="@color/colorBackground"
     android:fillViewport="true">
 
     <LinearLayout
@@ -14,26 +14,25 @@
 
         <!-- ── Statuskort ─────────────────────────────── -->
         <androidx.cardview.widget.CardView
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            card_view:cardCornerRadius="16dp"
-            card_view:cardElevation="4dp"
-            card_view:cardBackgroundColor="#FFFFFF">
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="24dp">
 
-                <!-- Färgad statusremsa — rundad pill -->
+                <!-- Statusremsa (färgad pill) -->
                 <View
                     android:id="@+id/statusIndicator"
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_height="6dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/shape_status_pill" />
 
                 <!-- App-titel -->
@@ -43,9 +42,9 @@
                     android:text="🚒 Brandstation Larm"
                     android:textSize="22sp"
                     android:textStyle="bold"
-                    android:textColor="#B71C1C"
+                    android:textColor="@color/colorPrimary"
                     android:gravity="center"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_marginBottom="6dp" />
 
                 <!-- Statustext -->
                 <TextView
@@ -54,8 +53,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textSize="15sp"
-                    android:textColor="#424242"
-                    android:layout_marginBottom="2dp"
+                    android:textColor="@color/textPrimary"
+                    android:layout_marginBottom="4dp"
                     android:text="Laddar…" />
 
                 <!-- Nästa pass -->
@@ -64,10 +63,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textSize="12sp"
-                    android:textColor="#9E9E9E"
-                    android:layout_marginBottom="16dp"
+                    android:textSize="13sp"
+                    android:textColor="@color/textSecondary"
+                    android:layout_marginBottom="20dp"
                     android:text="" />
+
+                <!-- Avdelare -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider"
+                    android:layout_marginBottom="16dp" />
 
                 <!-- På/Av-switch -->
                 <com.google.android.material.switchmaterial.SwitchMaterial
@@ -76,149 +82,166 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="Larmövervakning aktiv"
-                    android:textSize="15sp" />
+                    android:textColor="@color/textPrimary"
+                    android:textSize="16sp" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <!-- ── Konfigurationskort ──────────────────────── -->
         <androidx.cardview.widget.CardView
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            card_view:cardCornerRadius="16dp"
-            card_view:cardElevation="4dp"
-            card_view:cardBackgroundColor="#FFFFFF">
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="KONFIGURATION"
                     android:textSize="11sp"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/textSecondary"
                     android:letterSpacing="0.12"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="14dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSchedule"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:text="Joursschema"
-                    android:textColor="#B71C1C"
-                    app:strokeColor="#B71C1C"
-                    android:layout_marginBottom="8dp" />
+                    android:text="📅  Joursschema"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp"
+                    app:strokeColor="@color/colorPrimary"
+                    app:cornerRadius="12dp"
+                    android:layout_marginBottom="10dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSettings"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:text="Inställningar"
-                    android:textColor="#B71C1C"
-                    app:strokeColor="#B71C1C"
-                    android:layout_marginBottom="8dp" />
+                    android:text="⚙️  Inställningar"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp"
+                    app:strokeColor="@color/colorPrimary"
+                    app:cornerRadius="12dp"
+                    android:layout_marginBottom="10dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnPermissions"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:text="Behörigheter"
-                    android:textColor="#B71C1C"
-                    app:strokeColor="#B71C1C"
-                    android:layout_marginBottom="8dp" />
+                    android:text="🔐  Behörigheter"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp"
+                    app:strokeColor="@color/colorPrimary"
+                    app:cornerRadius="12dp"
+                    android:layout_marginBottom="10dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnLog"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:text="Larmlogg"
-                    android:textColor="#B71C1C"
-                    app:strokeColor="#B71C1C"
-                    android:layout_marginBottom="8dp" />
+                    android:text="📋  Larmlogg"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp"
+                    app:strokeColor="@color/colorPrimary"
+                    app:cornerRadius="12dp"
+                    android:layout_marginBottom="10dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnPickSound"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:text="Välj larmsignal"
-                    android:textColor="#B71C1C"
-                    app:strokeColor="#B71C1C" />
+                    android:text="🔔  Välj larmsignal"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp"
+                    app:strokeColor="@color/colorPrimary"
+                    app:cornerRadius="12dp" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <!-- ── Testkort ──────────────────────────────── -->
         <androidx.cardview.widget.CardView
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            card_view:cardCornerRadius="16dp"
-            card_view:cardElevation="4dp"
-            card_view:cardBackgroundColor="#FFFFFF">
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="TESTA LARM"
                     android:textSize="11sp"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/textSecondary"
                     android:letterSpacing="0.12"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_marginBottom="6dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Triggar larmet direkt. SMS-test: aktivera testläge i Inställningar och smsa LARM till dig själv."
-                    android:textSize="12sp"
-                    android:textColor="#9E9E9E"
-                    android:layout_marginBottom="12dp" />
+                    android:text="Triggar larmet direkt utan SMS. Aktivera testläge i Inställningar för att testa med riktigt SMS."
+                    android:textSize="13sp"
+                    android:textColor="@color/textSecondary"
+                    android:layout_marginBottom="16dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnTestTotal"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:text="Testa TOTALLARM"
-                    app:backgroundTint="#B71C1C"
-                    android:layout_marginBottom="8dp" />
+                    android:text="🚨  Testa TOTALLARM"
+                    android:textColor="@color/textOnPrimary"
+                    android:textSize="16sp"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:cornerRadius="14dp"
+                    android:layout_marginBottom="10dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnTestRegular"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:text="Testa vanligt larm"
-                    app:backgroundTint="#E65100"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_height="52dp"
+                    android:text="⚠️  Testa vanligt larm"
+                    android:textColor="@color/textOnPrimary"
+                    android:textSize="15sp"
+                    app:backgroundTint="@color/colorAccent"
+                    app:cornerRadius="14dp"
+                    android:layout_marginBottom="10dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnStopAlarm"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:text="Stäng av pågående larm"
-                    android:textColor="#757575"
-                    app:strokeColor="#BDBDBD" />
+                    android:text="⏹  Stäng av pågående larm"
+                    android:textColor="@color/textSecondary"
+                    android:textSize="14sp"
+                    app:strokeColor="@color/divider"
+                    app:cornerRadius="12dp" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

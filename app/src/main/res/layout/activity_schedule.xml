@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="@color/colorBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="24dp">
+        android:paddingBottom="32dp">
 
-        <!-- Sektion: Passdagar -->
+        <!-- Passdagar -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF">
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -31,142 +31,84 @@
                     android:layout_height="wrap_content"
                     android:text="PASSDAGAR"
                     android:textSize="11sp"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/textSecondary"
                     android:letterSpacing="0.12"
                     android:layout_marginBottom="8dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Markera de dagar du har ordinarie jour. Utanför dessa dagar och tider triggas bara totallarm."
+                    android:text="Markera de dagar du har ordinarie jour. Utanför schema triggas bara totallarm."
                     android:textSize="13sp"
-                    android:textColor="#757575"
+                    android:textColor="@color/textSecondary"
                     android:layout_marginBottom="16dp" />
 
-                <!-- Rad 1: Måndag + Tisdag -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="8dp">
-
-                    <CheckBox
-                        android:id="@+id/checkMon"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Måndag"
-                        android:textSize="15sp"
-                        android:paddingVertical="8dp"
-                        android:buttonTint="#B71C1C" />
-
-                    <CheckBox
-                        android:id="@+id/checkTue"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Tisdag"
-                        android:textSize="15sp"
-                        android:paddingVertical="8dp"
-                        android:buttonTint="#B71C1C" />
-
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:layout_marginBottom="4dp">
+                    <CheckBox android:id="@+id/checkMon" android:layout_width="0dp"
+                        android:layout_height="wrap_content" android:layout_weight="1"
+                        android:text="Måndag" android:textColor="@color/textPrimary"
+                        android:textSize="15sp" android:paddingVertical="10dp"
+                        android:buttonTint="@color/colorPrimary" />
+                    <CheckBox android:id="@+id/checkTue" android:layout_width="0dp"
+                        android:layout_height="wrap_content" android:layout_weight="1"
+                        android:text="Tisdag" android:textColor="@color/textPrimary"
+                        android:textSize="15sp" android:paddingVertical="10dp"
+                        android:buttonTint="@color/colorPrimary" />
                 </LinearLayout>
 
-                <!-- Rad 2: Onsdag + Torsdag -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="8dp">
-
-                    <CheckBox
-                        android:id="@+id/checkWed"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Onsdag"
-                        android:textSize="15sp"
-                        android:paddingVertical="8dp"
-                        android:buttonTint="#B71C1C" />
-
-                    <CheckBox
-                        android:id="@+id/checkThu"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Torsdag"
-                        android:textSize="15sp"
-                        android:paddingVertical="8dp"
-                        android:buttonTint="#B71C1C" />
-
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:layout_marginBottom="4dp">
+                    <CheckBox android:id="@+id/checkWed" android:layout_width="0dp"
+                        android:layout_height="wrap_content" android:layout_weight="1"
+                        android:text="Onsdag" android:textColor="@color/textPrimary"
+                        android:textSize="15sp" android:paddingVertical="10dp"
+                        android:buttonTint="@color/colorPrimary" />
+                    <CheckBox android:id="@+id/checkThu" android:layout_width="0dp"
+                        android:layout_height="wrap_content" android:layout_weight="1"
+                        android:text="Torsdag" android:textColor="@color/textPrimary"
+                        android:textSize="15sp" android:paddingVertical="10dp"
+                        android:buttonTint="@color/colorPrimary" />
                 </LinearLayout>
 
-                <!-- Rad 3: Fredag + Lördag -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="8dp">
-
-                    <CheckBox
-                        android:id="@+id/checkFri"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Fredag"
-                        android:textSize="15sp"
-                        android:paddingVertical="8dp"
-                        android:buttonTint="#B71C1C" />
-
-                    <CheckBox
-                        android:id="@+id/checkSat"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Lördag"
-                        android:textSize="15sp"
-                        android:paddingVertical="8dp"
-                        android:buttonTint="#B71C1C" />
-
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:layout_marginBottom="4dp">
+                    <CheckBox android:id="@+id/checkFri" android:layout_width="0dp"
+                        android:layout_height="wrap_content" android:layout_weight="1"
+                        android:text="Fredag" android:textColor="@color/textPrimary"
+                        android:textSize="15sp" android:paddingVertical="10dp"
+                        android:buttonTint="@color/colorPrimary" />
+                    <CheckBox android:id="@+id/checkSat" android:layout_width="0dp"
+                        android:layout_height="wrap_content" android:layout_weight="1"
+                        android:text="Lördag" android:textColor="@color/textPrimary"
+                        android:textSize="15sp" android:paddingVertical="10dp"
+                        android:buttonTint="@color/colorPrimary" />
                 </LinearLayout>
 
-                <!-- Rad 4: Söndag (ensam) -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                     android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/checkSun"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Söndag"
-                        android:textSize="15sp"
-                        android:paddingVertical="8dp"
-                        android:buttonTint="#B71C1C" />
-
-                    <!-- Platshållare för att behålla grid-alignment -->
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                    <CheckBox android:id="@+id/checkSun" android:layout_width="0dp"
+                        android:layout_height="wrap_content" android:layout_weight="1"
+                        android:text="Söndag" android:textColor="@color/textPrimary"
+                        android:textSize="15sp" android:paddingVertical="10dp"
+                        android:buttonTint="@color/colorPrimary" />
+                    <View android:layout_width="0dp" android:layout_height="wrap_content"
                         android:layout_weight="1" />
-
                 </LinearLayout>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Sektion: Passets tider -->
+        <!-- Passets tider -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF">
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -179,11 +121,18 @@
                     android:layout_height="wrap_content"
                     android:text="PASSETS TIDER"
                     android:textSize="11sp"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/textSecondary"
                     android:letterSpacing="0.12"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tryck på en tid för att ändra"
+                    android:textSize="13sp"
+                    android:textColor="@color/textSecondary"
                     android:layout_marginBottom="16dp" />
 
-                <!-- Tidsknappar -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -200,9 +149,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="🕐 Från"
+                            android:text="🕐  Från"
                             android:textSize="13sp"
-                            android:textColor="#757575"
+                            android:textColor="@color/textSecondary"
                             android:layout_marginBottom="4dp" />
 
                         <TextView
@@ -210,9 +159,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="07:00"
-                            android:textSize="32sp"
+                            android:textSize="36sp"
                             android:textStyle="bold"
-                            android:textColor="#B71C1C"
+                            android:textColor="@color/colorPrimary"
                             android:padding="16dp"
                             android:background="?android:attr/selectableItemBackground"
                             android:clickable="true"
@@ -224,8 +173,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="–"
-                        android:textSize="24sp"
-                        android:textColor="#9E9E9E"
+                        android:textSize="28sp"
+                        android:textColor="@color/textSecondary"
                         android:paddingHorizontal="8dp" />
 
                     <LinearLayout
@@ -238,9 +187,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="🕙 Till"
+                            android:text="🕙  Till"
                             android:textSize="13sp"
-                            android:textColor="#757575"
+                            android:textColor="@color/textSecondary"
                             android:layout_marginBottom="4dp" />
 
                         <TextView
@@ -248,9 +197,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="22:00"
-                            android:textSize="32sp"
+                            android:textSize="36sp"
                             android:textStyle="bold"
-                            android:textColor="#B71C1C"
+                            android:textColor="@color/colorPrimary"
                             android:padding="16dp"
                             android:background="?android:attr/selectableItemBackground"
                             android:clickable="true"
@@ -268,15 +217,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
+            android:paddingHorizontal="16dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSave"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:text="Spara schema"
-                app:backgroundTint="#B71C1C" />
+                android:text="💾  Spara schema"
+                android:textColor="@color/textOnPrimary"
+                android:textSize="16sp"
+                app:backgroundTint="@color/colorPrimary"
+                app:cornerRadius="14dp" />
 
         </LinearLayout>
 

@@ -1,12 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#CC0000</color>
-    <color name="colorPrimaryDark">#990000</color>
-    <color name="colorAccent">#FF6600</color>
+    <!-- Primärfärger (brandröd) -->
+    <color name="colorPrimary">#C62828</color>
+    <color name="colorPrimaryDark">#B71C1C</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorAccent">#FF8F00</color>
 
+    <!-- Bakgrund & ytor -->
+    <color name="colorBackground">#F0F2F5</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorSurfaceVariant">#F8F9FA</color>
+
+    <!-- Text -->
+    <color name="textPrimary">#1A1A1A</color>
+    <color name="textSecondary">#5C6B7A</color>
+    <color name="textHint">#BDBDBD</color>
+    <color name="textOnPrimary">#FFFFFF</color>
+
+    <!-- Statusindikatorer -->
     <color name="status_green">#2E7D32</color>
+    <color name="status_green_bg">#E8F5E9</color>
+    <color name="status_red">#C62828</color>
+    <color name="status_red_bg">#FFEBEE</color>
     <color name="status_orange">#E65100</color>
+    <color name="status_orange_bg">#FFF3E0</color>
     <color name="status_gray">#757575</color>
+    <color name="status_gray_bg">#F5F5F5</color>
 
-    <color name="ic_launcher_background">#CC0000</color>
+    <!-- Kortram och avdelare -->
+    <color name="divider">#E0E0E0</color>
+    <color name="cardStroke">#E8ECF0</color>
+
+    <!-- Launcher-ikon bakgrund -->
+    <color name="ic_launcher_background">#C62828</color>
 </resources>

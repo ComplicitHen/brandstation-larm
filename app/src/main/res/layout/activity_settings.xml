@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="@color/colorBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="24dp">
+        android:paddingBottom="32dp">
 
-        <!-- Sektion: SMS-filter -->
+        <!-- SMS-filter -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF">
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -31,7 +31,7 @@
                     android:layout_height="wrap_content"
                     android:text="SMS-FILTER"
                     android:textSize="11sp"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/textSecondary"
                     android:letterSpacing="0.12"
                     android:layout_marginBottom="16dp" />
 
@@ -41,15 +41,15 @@
                     android:text="Avsändarnummer"
                     android:textStyle="bold"
                     android:textSize="15sp"
-                    android:textColor="#212121"
+                    android:textColor="@color/textPrimary"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nummer larmsms kommer ifrån. Kommaseparera flera, t.ex. 3315,112"
+                    android:text="Nummer larmsms kommer ifrån, t.ex. 3315,112"
                     android:textSize="13sp"
-                    android:textColor="#757575"
+                    android:textColor="@color/textSecondary"
                     android:layout_marginBottom="8dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -57,13 +57,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="#B71C1C">
+                    app:boxStrokeColor="@color/colorPrimary"
+                    app:hintTextColor="@color/colorPrimary">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etSenderNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text"
-                        android:hint="Avsändarnummer (kommaseparera flera, t.ex. 3315,112)" />
+                        android:textColor="@color/textPrimary"
+                        android:hint="t.ex. 3315,112" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -72,7 +74,7 @@
                     android:text="Nyckelord för TOTALLARM"
                     android:textStyle="bold"
                     android:textSize="15sp"
-                    android:textColor="#212121"
+                    android:textColor="@color/textPrimary"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
@@ -80,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:text="Text i SMS som identifierar totallarm"
                     android:textSize="13sp"
-                    android:textColor="#757575"
+                    android:textColor="@color/textSecondary"
                     android:layout_marginBottom="8dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -88,11 +90,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="#B71C1C">
+                    app:boxStrokeColor="@color/colorPrimary"
+                    app:hintTextColor="@color/colorPrimary">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etTotalAlarmKeyword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/textPrimary"
                         android:hint="TOTALLARM" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -102,42 +106,44 @@
                     android:text="Nyckelord för vanligt larm"
                     android:textStyle="bold"
                     android:textSize="15sp"
-                    android:textColor="#212121"
+                    android:textColor="@color/textPrimary"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Text i SMS som identifierar vanligt larm (VRR: LARM)"
+                    android:text="Text i SMS som identifierar vanligt larm"
                     android:textSize="13sp"
-                    android:textColor="#757575"
+                    android:textColor="@color/textSecondary"
                     android:layout_marginBottom="8dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="#B71C1C">
+                    app:boxStrokeColor="@color/colorPrimary"
+                    app:hintTextColor="@color/colorPrimary">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etAlarmKeyword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/textPrimary"
                         android:hint="LARM" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Sektion: Larmtyper -->
+        <!-- Larmtyper -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF">
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -150,7 +156,7 @@
                     android:layout_height="wrap_content"
                     android:text="LARMTYPER"
                     android:textSize="11sp"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/textSecondary"
                     android:letterSpacing="0.12"
                     android:layout_marginBottom="16dp" />
 
@@ -160,15 +166,15 @@
                     android:text="Totallarm"
                     android:textStyle="bold"
                     android:textSize="15sp"
-                    android:textColor="#212121"
+                    android:textColor="@color/textPrimary"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Slå av om du inte vill larmas vid totallarm (t.ex. semester eller sjukdom). Vanliga larm under schema påverkas inte."
+                    android:text="Slå av om du inte vill larmas vid totallarm (t.ex. semester)"
                     android:textSize="13sp"
-                    android:textColor="#757575"
+                    android:textColor="@color/textSecondary"
                     android:layout_marginBottom="12dp" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
@@ -176,6 +182,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Trigga larm vid TOTALLARM"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="15sp"
+                    android:layout_marginBottom="20dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider"
                     android:layout_marginBottom="20dp" />
 
                 <TextView
@@ -184,15 +198,15 @@
                     android:text="Endast vibration"
                     android:textStyle="bold"
                     android:textSize="15sp"
-                    android:textColor="#212121"
+                    android:textColor="@color/textPrimary"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Endast vibration (inget ljud)"
+                    android:text="Larmar med vibration utan ljud"
                     android:textSize="13sp"
-                    android:textColor="#757575"
+                    android:textColor="@color/textSecondary"
                     android:layout_marginBottom="12dp" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
@@ -200,6 +214,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Endast vibration (inget ljud)"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="15sp"
+                    android:layout_marginBottom="20dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider"
                     android:layout_marginBottom="20dp" />
 
                 <TextView
@@ -208,7 +230,7 @@
                     android:text="Text-to-speech larm"
                     android:textStyle="bold"
                     android:textSize="15sp"
-                    android:textColor="#212121"
+                    android:textColor="@color/textPrimary"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
@@ -216,28 +238,30 @@
                     android:layout_height="wrap_content"
                     android:text="Appen säger 'TOTALLARM!' med röst"
                     android:textSize="13sp"
-                    android:textColor="#757575"
+                    android:textColor="@color/textSecondary"
                     android:layout_marginBottom="12dp" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switchUseTts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tala larmet (Text-to-speech)" />
+                    android:text="Tala larmet (Text-to-speech)"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="15sp" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Sektion: Testläge -->
+        <!-- Testläge -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF">
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -250,7 +274,7 @@
                     android:layout_height="wrap_content"
                     android:text="TESTLÄGE"
                     android:textSize="11sp"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/textSecondary"
                     android:letterSpacing="0.12"
                     android:layout_marginBottom="16dp" />
 
@@ -260,15 +284,15 @@
                     android:text="SMS-testläge"
                     android:textStyle="bold"
                     android:textSize="15sp"
-                    android:textColor="#212121"
+                    android:textColor="@color/textPrimary"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="När PÅ: appen triggar på SMS från ALLA avsändare (inte bara 3315). Slå på, smsa TOTALLARM eller LARM till dig själv, verifiera att larmet går. Kom ihåg att slå av igen!"
+                    android:text="När PÅ: appen triggar på SMS från ALLA avsändare. Smsa TOTALLARM eller LARM till dig själv för att testa. Kom ihåg att slå av!"
                     android:textSize="13sp"
-                    android:textColor="#757575"
+                    android:textColor="@color/textSecondary"
                     android:layout_marginBottom="12dp" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
@@ -276,31 +300,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="SMS-testläge (alla avsändare)"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="15sp"
                     android:layout_marginBottom="12dp" />
 
-                <!-- Varningstext -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="⚠️  Testläge bör bara vara aktivt vid test. Glöm inte att stänga av!"
+                    android:text="⚠️  Testläge bör bara vara aktivt vid test. Glöm inte stänga av!"
                     android:textSize="13sp"
-                    android:textColor="#E65100"
-                    android:background="#FFF3E0"
+                    android:textColor="@color/status_orange"
+                    android:background="@color/status_orange_bg"
                     android:padding="12dp" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Sektion: Beteende -->
+        <!-- Beteende -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF">
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -313,26 +338,25 @@
                     android:layout_height="wrap_content"
                     android:text="BETEENDE"
                     android:textSize="11sp"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/textSecondary"
                     android:letterSpacing="0.12"
                     android:layout_marginBottom="16dp" />
 
-                <!-- Auto-stäng av -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Auto-stäng av larm"
                     android:textStyle="bold"
                     android:textSize="15sp"
-                    android:textColor="#212121"
+                    android:textColor="@color/textPrimary"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Auto-stäng av efter X minuter (0 = aldrig)"
+                    android:text="Stäng av automatiskt efter X minuter (0 = aldrig)"
                     android:textSize="13sp"
-                    android:textColor="#757575"
+                    android:textColor="@color/textSecondary"
                     android:layout_marginBottom="8dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -340,48 +364,62 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="#B71C1C">
+                    app:boxStrokeColor="@color/colorPrimary"
+                    app:hintTextColor="@color/colorPrimary">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etAutoDismissMinutes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
+                        android:textColor="@color/textPrimary"
                         android:hint="10" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Ficklampa strobe -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider"
+                    android:layout_marginBottom="20dp" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Ficklampa vid larm"
                     android:textStyle="bold"
                     android:textSize="15sp"
-                    android:textColor="#212121"
+                    android:textColor="@color/textPrimary"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ficklampa blinkar vid larm"
+                    android:text="Ficklampan blinkar under larmet"
                     android:textSize="13sp"
-                    android:textColor="#757575"
-                    android:layout_marginBottom="8dp" />
+                    android:textColor="@color/textSecondary"
+                    android:layout_marginBottom="12dp" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switchFlashlightStrobe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Ficklampa blinkar vid larm"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="15sp"
                     android:layout_marginBottom="20dp" />
 
-                <!-- Tyst nattetid -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider"
+                    android:layout_marginBottom="20dp" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Tyst nattetid"
                     android:textStyle="bold"
                     android:textSize="15sp"
-                    android:textColor="#212121"
+                    android:textColor="@color/textPrimary"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
@@ -389,14 +427,16 @@
                     android:layout_height="wrap_content"
                     android:text="Vanliga larm är tysta under dessa tider (totallarm larmar alltid)"
                     android:textSize="13sp"
-                    android:textColor="#757575"
-                    android:layout_marginBottom="8dp" />
+                    android:textColor="@color/textSecondary"
+                    android:layout_marginBottom="12dp" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switchQuietHours"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tyst nattetid (vanliga larm)"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="15sp"
                     android:layout_marginBottom="12dp" />
 
                 <LinearLayout
@@ -418,20 +458,20 @@
                             android:layout_height="wrap_content"
                             android:text="Från"
                             android:textSize="12sp"
-                            android:textColor="#757575"
+                            android:textColor="@color/textSecondary"
                             android:layout_marginBottom="4dp" />
 
                         <TextView
                             android:id="@+id/tvQuietStart"
                             android:layout_width="match_parent"
-                            android:layout_height="48dp"
+                            android:layout_height="52dp"
                             android:gravity="center"
                             android:background="?android:attr/selectableItemBackground"
                             android:clickable="true"
                             android:focusable="true"
-                            android:textSize="20sp"
+                            android:textSize="24sp"
                             android:textStyle="bold"
-                            android:textColor="#B71C1C"
+                            android:textColor="@color/colorPrimary"
                             android:text="22:00" />
 
                     </LinearLayout>
@@ -448,20 +488,20 @@
                             android:layout_height="wrap_content"
                             android:text="Till"
                             android:textSize="12sp"
-                            android:textColor="#757575"
+                            android:textColor="@color/textSecondary"
                             android:layout_marginBottom="4dp" />
 
                         <TextView
                             android:id="@+id/tvQuietEnd"
                             android:layout_width="match_parent"
-                            android:layout_height="48dp"
+                            android:layout_height="52dp"
                             android:gravity="center"
                             android:background="?android:attr/selectableItemBackground"
                             android:clickable="true"
                             android:focusable="true"
-                            android:textSize="20sp"
+                            android:textSize="24sp"
                             android:textStyle="bold"
-                            android:textColor="#B71C1C"
+                            android:textColor="@color/colorPrimary"
                             android:text="06:00" />
 
                     </LinearLayout>
@@ -476,29 +516,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:layout_marginBottom="16dp">
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="12dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSave"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:text="Spara"
-                app:backgroundTint="#B71C1C" />
+                android:text="💾  Spara inställningar"
+                android:textColor="@color/textOnPrimary"
+                android:textSize="16sp"
+                app:backgroundTint="@color/colorPrimary"
+                app:cornerRadius="14dp" />
 
         </LinearLayout>
 
-        <!-- Sektion: Export/Import -->
+        <!-- Export / Import -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF">
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -511,36 +553,40 @@
                     android:layout_height="wrap_content"
                     android:text="EXPORT / IMPORT"
                     android:textSize="11sp"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/textSecondary"
                     android:letterSpacing="0.12"
                     android:layout_marginBottom="8dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Exportera eller importera alla inställningar som JSON."
+                    android:text="Exportera eller importera alla inställningar som JSON-fil."
                     android:textSize="13sp"
-                    android:textColor="#757575"
+                    android:textColor="@color/textSecondary"
                     android:layout_marginBottom="16dp" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:id="@+id/btnExportSettings"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:text="Exportera inställningar"
-                    android:textColor="#B71C1C"
-                    app:strokeColor="#B71C1C"
-                    android:layout_marginBottom="8dp" />
+                    android:text="⬆️  Exportera inställningar"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp"
+                    app:strokeColor="@color/colorPrimary"
+                    app:cornerRadius="12dp"
+                    android:layout_marginBottom="10dp" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:id="@+id/btnImportSettings"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:text="Importera inställningar"
-                    android:textColor="#B71C1C"
-                    app:strokeColor="#B71C1C" />
+                    android:text="⬇️  Importera inställningar"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp"
+                    app:strokeColor="@color/colorPrimary"
+                    app:cornerRadius="12dp" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
