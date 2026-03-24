@@ -21,18 +21,30 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Hanterar Gradle wrapper automatiskt — ingen gradle-wrapper.jar behövs i repot
       - name: Konfigurera Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.6'
 
-      - name: Bygg debug-APK
-        run: gradle assembleDebug
+      - name: Återskapa signeringsnyckel
+        run: |
+          echo "${{ secrets.RELEASE_KEYSTORE }}" | base64 --decode > app/brandstation-release.keystore
+
+      - name: Bygg release-APK
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          gradle assembleRelease \
+            -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/app/brandstation-release.keystore \
+            -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD \
+            -Pandroid.injected.signing.key.alias=$KEY_ALIAS \
+            -Pandroid.injected.signing.key.password=$KEY_PASSWORD
 
       - name: Ladda upp APK som artefakt
         uses: actions/upload-artifact@v4
         with:
-          name: brandstation-larm-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: brandstation-larm-release
+          path: app/build/outputs/apk/release/app-release.apk
           retention-days: 30

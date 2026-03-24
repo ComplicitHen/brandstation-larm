@@ -31,6 +31,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            // Signering sköts av GitHub Actions via -P-flaggor (secrets)
         }
     }
 }
